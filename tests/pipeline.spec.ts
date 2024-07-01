@@ -113,7 +113,6 @@ describe('Pipeline tests', () => {
       ctx.foobar = 'baz';
       next();
     });
-
     engine.use(
       async () => {
         throw new Error('This is an error');

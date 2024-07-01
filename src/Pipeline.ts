@@ -5,7 +5,7 @@ import { Middleware } from './types.js';
  * A middleware container and invoker
  */
 export class Pipeline<T> {
-  middlewares: Middleware<T>[];
+  private middlewares: Middleware<T>[];
 
   constructor(...middlewares: Middleware<T>[]) {
     this.middlewares = middlewares;
@@ -14,8 +14,9 @@ export class Pipeline<T> {
   /**
    * Add a middleware function.
    */
-  use(...mw: Middleware<T>[]): void {
+  use(...mw: Middleware<T>[]): Pipeline<T> {
     this.middlewares.push(...mw);
+    return this;
   }
 
   /**
@@ -23,6 +24,6 @@ export class Pipeline<T> {
    * given Context.
    */
   execute(context: T): Promise<void> {
-    return invokeMiddlewares(context, this.middlewares);
+    return invokeMiddlewares<T>(context, this.middlewares);
   }
 }
