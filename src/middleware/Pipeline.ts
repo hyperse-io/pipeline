@@ -1,5 +1,5 @@
+import { Middleware } from '../types/types-middleware.js';
 import { invokeMiddlewares } from './invoke.js';
-import { Middleware } from './types.js';
 
 /**
  * A middleware container and invoker
