@@ -1,7 +1,7 @@
 import { fold } from 'fp-ts/Either';
 import type { Union } from 'ts-toolbelt';
-import pipeWith from '@ramda/pipewith';
 import { isPromise } from '../helper/helper-is-promise.js';
+import { pipeWith } from '../helper/helper-pipe-with.js';
 import {
   Exists,
   ExitPipeReturnValue,

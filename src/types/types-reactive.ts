@@ -7,6 +7,8 @@ import type {
   MaybeAsync,
 } from 'purify-ts';
 
+export type PipeWithFunction = (...args: any[]) => any;
+
 export type PipeCallback = (fns: string, ...args: unknown[]) => unknown;
 
 export type Exists =

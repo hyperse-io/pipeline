@@ -8,6 +8,7 @@
     "paths": {},
     "lib": ["dom", "dom.iterable", "esnext"],
     "isolatedModules": true,
+    "noImplicitThis": false,
     "jsx": "preserve"
   },
   "exclude": ["**/node_modules", "**/.*/", "dist", "build"],
