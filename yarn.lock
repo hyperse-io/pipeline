@@ -814,7 +814,6 @@ __metadata:
     "@hyperse/eslint-config-hyperse": "npm:^1.0.10"
     "@hyperse/exec-program": "npm:^1.0.6"
     "@types/node": "npm:^20.14.9"
-    "@types/ramda": "npm:^0.30.0"
     "@types/react": "npm:^18.3.3"
     "@types/react-dom": "npm:^18.3.0"
     commitizen: "npm:4.3.0"
@@ -1426,15 +1425,6 @@ __metadata:
   version: 15.7.12
   resolution: "@types/prop-types@npm:15.7.12"
   checksum: 10/ac16cc3d0a84431ffa5cfdf89579ad1e2269549f32ce0c769321fdd078f84db4fbe1b461ed5a1a496caf09e637c0e367d600c541435716a55b1d9713f5035dfe
-  languageName: node
-  linkType: hard
-
-"@types/ramda@npm:^0.30.0":
-  version: 0.30.0
-  resolution: "@types/ramda@npm:0.30.0"
-  dependencies:
-    types-ramda: "npm:^0.30.0"
-  checksum: 10/abe9d9c872778d2598298a0c4805fa715618fe79a4d7e203c71076bc72e28c97f04ffb108274cbfc33b0407a5aa3c2c37f609705a175d4102418e292e4e55a22
   languageName: node
   linkType: hard
 
@@ -8693,15 +8683,6 @@ __metadata:
   version: 0.0.6
   resolution: "typedarray@npm:0.0.6"
   checksum: 10/2cc1bcf7d8c1237f6a16c04efc06637b2c5f2d74e58e84665445cf87668b85a21ab18dd751fa49eee6ae024b70326635d7b79ad37b1c370ed2fec6aeeeb52714
-  languageName: node
-  linkType: hard
-
-"types-ramda@npm:^0.30.0":
-  version: 0.30.1
-  resolution: "types-ramda@npm:0.30.1"
-  dependencies:
-    ts-toolbelt: "npm:^9.6.0"
-  checksum: 10/b865c8f97df911b82b51b3cb4afa9b52b971d344dd79d203cd118e424a03761aebfea538c643f6283f700a3b4000d07d2168e353691b5caff076542bad78e420
   languageName: node
   linkType: hard
 

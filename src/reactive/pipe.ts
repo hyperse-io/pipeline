@@ -1589,6 +1589,12 @@ export function pipe<
   typeof fn9
 >;
 
+/**
+ * Creates a function that pipes the input through a series of functions.
+ *
+ * @param functions - The functions to pipe.
+ * @returns A function that accepts the input and passes it through the piped functions.
+ */
 export function pipe(
   ...functions: Array<Function>
 ): (...args: unknown[]) => unknown {
@@ -1652,31 +1658,72 @@ export function pipe(
   return reactiveFun;
 }
 
-export const isExitPipeValue = <T>(x: unknown): x is ExitPipeReturnValue<T> =>
-  exitPipeReturnValues.has(x as object);
+/**
+ * Checks if the provided value is an instance of `ExitPipeReturnValue`.
+ *
+ * @param x - The value to check.
+ * @returns A boolean indicating whether the value is an instance of `ExitPipeReturnValue`.
+ * @template T - The type of the value.
+ */
+export function isExitPipeValue<T>(x: unknown): x is ExitPipeReturnValue<T> {
+  return exitPipeReturnValues.has(x as object);
+}
 
+/**
+ * Exits the pipe and returns a value.
+ *
+ * @template T - The type of the value to be returned.
+ * @param r - The value to be returned.
+ * @returns An object containing the returned value.
+ */
 export function exitPipe<T>(r: T) {
   const exitPipeReturnValue: ExitPipeReturnValue<T> = { r };
   exitPipeReturnValues.add(exitPipeReturnValue);
   return exitPipeReturnValue;
 }
 
+/**
+ * Registers a callback function to be executed before all pipes.
+ *
+ * @param fn - The callback function to be executed before all pipes.
+ */
 export function beforeAll(fn: PipeCallback) {
   beforeAllFns.add(fn);
 }
 
+/**
+ * Registers a callback function to be executed after all pipes have completed.
+ *
+ * @param fn - The callback function to be executed.
+ */
 export function afterAll(fn: PipeCallback) {
   afterAllFns.add(fn);
 }
 
+/**
+ * Clears all the functions registered in the `beforeAllFns` array.
+ */
 export function clearBeforeAll() {
   beforeAllFns.clear();
 }
 
+/**
+ * Clears all the registered afterAll functions.
+ */
 export function clearAfterAll() {
   afterAllFns.clear();
 }
 
+/**
+ * Adds a function to the pipe context and returns a new function that applies the added function to the provided arguments.
+ *
+ * @template T - The type of the first argument.
+ * @template L - The type of the second argument.
+ * @template R - The type of the return value.
+ * @template C - The type of the pipe context function.
+ * @param {Function} fn - The function to be added to the pipe context.
+ * @returns {(r: T, l: L) => R} - A new function that applies the added function to the provided arguments.
+ */
 export function pipeContext<T, L, R, C>(
   fn: (x: C) => (r: T, l: L) => R
 ): (r: T, l: L) => R {
