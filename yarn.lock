@@ -813,7 +813,6 @@ __metadata:
     "@commitlint/config-conventional": "npm:19.2.2"
     "@hyperse/eslint-config-hyperse": "npm:^1.0.10"
     "@hyperse/exec-program": "npm:^1.0.6"
-    "@ramda/pipewith": "npm:^0.26.1"
     "@types/node": "npm:^20.14.9"
     "@types/ramda": "npm:^0.30.0"
     "@types/react": "npm:^18.3.3"
@@ -1126,13 +1125,6 @@ __metadata:
   version: 0.1.1
   resolution: "@pkgr/core@npm:0.1.1"
   checksum: 10/6f25fd2e3008f259c77207ac9915b02f1628420403b2630c92a07ff963129238c9262afc9e84344c7a23b5cc1f3965e2cd17e3798219f5fd78a63d144d3cceba
-  languageName: node
-  linkType: hard
-
-"@ramda/pipewith@npm:^0.26.1":
-  version: 0.26.1
-  resolution: "@ramda/pipewith@npm:0.26.1"
-  checksum: 10/83aca3c343b69d429bdfbe58b5a5ee52e27e73f3e06cfd16a163675ee1dcc925f8425dcec5cfc46ba76aa0fb941b154278507c66db814fccc12b3b124e6f425e
   languageName: node
   linkType: hard
 

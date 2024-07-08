@@ -78,7 +78,6 @@
   },
   "packageManager": "yarn@4.3.0",
   "dependencies": {
-    "@ramda/pipewith": "^0.26.1",
     "fp-ts": "^2.16.7",
     "monet": "^0.9.3",
     "purify-ts": "^0.16.3",
