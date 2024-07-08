@@ -827,7 +827,6 @@ __metadata:
     monet: "npm:^0.9.3"
     next: "npm:14.2.4"
     npm-run-all: "npm:^4.1.5"
-    p-is-promise: "npm:^4.0.0"
     purify-ts: "npm:^0.16.3"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -6695,13 +6694,6 @@ __metadata:
   dependencies:
     p-map: "npm:^2.0.0"
   checksum: 10/76e552ca624ce2233448d68b19eec9de42b695208121998f7e011edce71d1079a83096ee6a2078fb2a59cfa8a5c999f046edf00ebf16a8e780022010b4693234
-  languageName: node
-  linkType: hard
-
-"p-is-promise@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "p-is-promise@npm:4.0.0"
-  checksum: 10/972af73e004e35fdaccf4bda5861e04185ed004688931c8ba34ae738ba560fe1e2369521d629d0692a1ff10f8cb391e44082b9d4bf75730b326e0bfa35573253
   languageName: node
   linkType: hard
 

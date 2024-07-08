@@ -616,7 +616,7 @@ describe('Rocket pipes tests', () => {
 
     it('MaybeAsync none passthrough and result test', async () => {
       const resp = await pipe(
-        () => MaybeAsync(({ liftMaybe }) => liftMaybe(PurifyMaybe.zero())),
+        () => MaybeAsync(({ liftMaybe }) => liftMaybe(PurifyMaybe.of(0))),
         (s, n) => s || n
       )();
       expect(resp).toEqual(void 0);
@@ -626,7 +626,7 @@ describe('Rocket pipes tests', () => {
       const resp = await pipe(
         () =>
           Promise.resolve(
-            MaybeAsync(({ liftMaybe }) => liftMaybe(PurifyMaybe.zero()))
+            MaybeAsync(({ liftMaybe }) => liftMaybe(PurifyMaybe.of(0)))
           ),
         (s, n) => s || n
       )();

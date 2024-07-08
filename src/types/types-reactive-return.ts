@@ -8,7 +8,7 @@ import type {
 } from 'purify-ts';
 import { ExitPipeReturnValue } from './types-reactive.js';
 
-export type FnReturn<T, L, R> =
+export type PipeFuncReturn<T, L, R> =
   | Promise<
       | FpTsEither<L, T>
       | MaybeAsync<T>

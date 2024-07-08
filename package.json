@@ -81,7 +81,6 @@
     "@ramda/pipewith": "^0.26.1",
     "fp-ts": "^2.16.7",
     "monet": "^0.9.3",
-    "p-is-promise": "^4.0.0",
     "purify-ts": "^0.16.3",
     "ts-toolbelt": "^9.6.0"
   }

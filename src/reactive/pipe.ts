@@ -1,8 +1,18 @@
 import { fold } from 'fp-ts/Either';
-import isPromise from 'p-is-promise';
 import type { Union } from 'ts-toolbelt';
 import pipeWith from '@ramda/pipewith';
-import { Exists, PipeCallback } from '../types/types-reactive.js';
+import { isPromise } from '../helper/helper-is-promise.js';
+import {
+  Exists,
+  ExitPipeReturnValue,
+  isFpTsEither,
+  isMonetCata,
+  isPurifyEither,
+  isPurifyEitherAsync,
+  isPurifyMaybe,
+  isPurifyMaybeAsync,
+  PipeCallback,
+} from '../types/types-reactive.js';
 import {
   ExtractExitPipe1,
   ExtractExitPipe2,
@@ -16,7 +26,7 @@ import {
   ExtractExitPipe10,
 } from '../types/types-reactive-extract.js';
 import {
-  FnReturn,
+  PipeFuncReturn,
   PipeReturn1,
   PipeReturn2,
   PipeReturn3,
@@ -28,14 +38,6 @@ import {
   PipeReturn9,
   PipeReturn10,
 } from '../types/types-reactive-return.js';
-import {
-  isFpTsEither,
-  isMonetCata,
-  isPurifyEither,
-  isPurifyEitherAsync,
-  isPurifyMaybe,
-  isPurifyMaybeAsync,
-} from './helper.js';
 
 const pipeSymbol = Symbol('pipe');
 const pipeContextFns = new WeakSet();
@@ -80,7 +82,7 @@ const compose = (fn: Function, res: unknown): unknown => {
 };
 
 export function pipe<T1, L1, R1>(
-  fn0: () => FnReturn<T1, L1, R1>
+  fn0: () => PipeFuncReturn<T1, L1, R1>
 ): PipeReturn1<
   () => Promise<
     Union.Select<ExtractExitPipe1<R1> | L1 | T1, Exists, 'extends->'>
@@ -88,7 +90,7 @@ export function pipe<T1, L1, R1>(
   typeof fn0
 >;
 export function pipe<V0, T1, L1, R1>(
-  fn0: (x0: V0) => FnReturn<T1, L1, R1>
+  fn0: (x0: V0) => PipeFuncReturn<T1, L1, R1>
 ): PipeReturn1<
   (
     x0: V0
@@ -98,7 +100,7 @@ export function pipe<V0, T1, L1, R1>(
   typeof fn0
 >;
 export function pipe<V0, V1, T1, L1, R1>(
-  fn0: (x0: V0, x1: V1) => FnReturn<T1, L1, R1>
+  fn0: (x0: V0, x1: V1) => PipeFuncReturn<T1, L1, R1>
 ): PipeReturn1<
   (
     x0: V0,
@@ -109,7 +111,7 @@ export function pipe<V0, V1, T1, L1, R1>(
   typeof fn0
 >;
 export function pipe<V0, V1, V2, T1, L1, R1>(
-  fn0: (x0: V0, x1: V1, x2: V2) => FnReturn<T1, L1, R1>
+  fn0: (x0: V0, x1: V1, x2: V2) => PipeFuncReturn<T1, L1, R1>
 ): PipeReturn1<
   (
     x0: V0,
@@ -122,8 +124,8 @@ export function pipe<V0, V1, V2, T1, L1, R1>(
 >;
 
 export function pipe<T1, T2, L1, L2, R1, R2>(
-  fn0: () => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>
+  fn0: () => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>
 ): PipeReturn2<
   () => Promise<
     Union.Select<ExtractExitPipe2<R2, R1> | L2 | T2, Exists, 'extends->'>
@@ -132,8 +134,8 @@ export function pipe<T1, T2, L1, L2, R1, R2>(
   typeof fn1
 >;
 export function pipe<V0, T1, T2, L1, L2, R1, R2>(
-  fn0: (x0: V0) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>
+  fn0: (x0: V0) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>
 ): PipeReturn2<
   (
     x0: V0
@@ -144,8 +146,8 @@ export function pipe<V0, T1, T2, L1, L2, R1, R2>(
   typeof fn1
 >;
 export function pipe<V0, V1, T1, T2, L1, L2, R1, R2>(
-  fn0: (x0: V0, x1: V1) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>
+  fn0: (x0: V0, x1: V1) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>
 ): PipeReturn2<
   (
     x0: V0,
@@ -157,8 +159,8 @@ export function pipe<V0, V1, T1, T2, L1, L2, R1, R2>(
   typeof fn1
 >;
 export function pipe<V0, V1, V2, T1, T2, L1, L2, R1, R2>(
-  fn0: (x0: V0, x1: V1, x2: V2) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>
+  fn0: (x0: V0, x1: V1, x2: V2) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>
 ): PipeReturn2<
   (
     x0: V0,
@@ -172,9 +174,9 @@ export function pipe<V0, V1, V2, T1, T2, L1, L2, R1, R2>(
 >;
 
 export function pipe<T1, T2, T3, L1, L2, L3, R1, R2, R3>(
-  fn0: () => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>
+  fn0: () => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>
 ): PipeReturn3<
   () => Promise<
     Union.Select<ExtractExitPipe3<R3, R2, R1> | L3 | T3, Exists, 'extends->'>
@@ -184,9 +186,9 @@ export function pipe<T1, T2, T3, L1, L2, L3, R1, R2, R3>(
   typeof fn2
 >;
 export function pipe<V0, T1, T2, T3, L1, L2, L3, R1, R2, R3>(
-  fn0: (x: V0) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>
+  fn0: (x: V0) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>
 ): PipeReturn3<
   (
     x: V0
@@ -198,9 +200,9 @@ export function pipe<V0, T1, T2, T3, L1, L2, L3, R1, R2, R3>(
   typeof fn2
 >;
 export function pipe<V0, V1, T1, T2, T3, L1, L2, L3, R1, R2, R3>(
-  fn0: (x0: V0, x1: V1) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>
+  fn0: (x0: V0, x1: V1) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>
 ): PipeReturn3<
   (
     x0: V0,
@@ -213,9 +215,9 @@ export function pipe<V0, V1, T1, T2, T3, L1, L2, L3, R1, R2, R3>(
   typeof fn2
 >;
 export function pipe<V0, V1, V2, T1, T2, T3, L1, L2, L3, R1, R2, R3>(
-  fn0: (x0: V0, x1: V1, x2: V2) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>
+  fn0: (x0: V0, x1: V1, x2: V2) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>
 ): PipeReturn3<
   (
     x0: V0,
@@ -230,10 +232,10 @@ export function pipe<V0, V1, V2, T1, T2, T3, L1, L2, L3, R1, R2, R3>(
 >;
 
 export function pipe<T1, T2, T3, T4, L1, L2, L3, L4, R1, R2, R3, R4>(
-  fn0: () => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>
+  fn0: () => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>
 ): PipeReturn4<
   () => Promise<
     Union.Select<
@@ -248,10 +250,10 @@ export function pipe<T1, T2, T3, T4, L1, L2, L3, L4, R1, R2, R3, R4>(
   typeof fn3
 >;
 export function pipe<V0, T1, T2, T3, T4, L1, L2, L3, L4, R1, R2, R3, R4>(
-  fn0: (x: V0) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>
+  fn0: (x: V0) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>
 ): PipeReturn4<
   (
     x: V0
@@ -268,10 +270,10 @@ export function pipe<V0, T1, T2, T3, T4, L1, L2, L3, L4, R1, R2, R3, R4>(
   typeof fn3
 >;
 export function pipe<V0, V1, T1, T2, T3, T4, L1, L2, L3, L4, R1, R2, R3, R4>(
-  fn0: (x0: V0, x1: V1) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>
+  fn0: (x0: V0, x1: V1) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>
 ): PipeReturn4<
   (
     x0: V0,
@@ -305,10 +307,10 @@ export function pipe<
   R3,
   R4,
 >(
-  fn0: (x0: V0, x1: V1, x2: V2) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>
+  fn0: (x0: V0, x1: V1, x2: V2) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>
 ): PipeReturn4<
   (
     x0: V0,
@@ -344,11 +346,11 @@ export function pipe<
   R4,
   R5,
 >(
-  fn0: () => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>
+  fn0: () => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>
 ): PipeReturn5<
   () => Promise<
     Union.Select<
@@ -381,11 +383,11 @@ export function pipe<
   R4,
   R5,
 >(
-  fn0: (x: V0) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>
+  fn0: (x: V0) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>
 ): PipeReturn5<
   (
     x: V0
@@ -421,11 +423,11 @@ export function pipe<
   R4,
   R5,
 >(
-  fn0: (x0: V0, x1: V1) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>
+  fn0: (x0: V0, x1: V1) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>
 ): PipeReturn5<
   (
     x0: V0,
@@ -463,11 +465,11 @@ export function pipe<
   R4,
   R5,
 >(
-  fn0: (x0: V0, x1: V1, x2: V2) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>
+  fn0: (x0: V0, x1: V1, x2: V2) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>
 ): PipeReturn5<
   (
     x0: V0,
@@ -507,12 +509,12 @@ export function pipe<
   R5,
   R6,
 >(
-  fn0: () => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>
+  fn0: () => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>
 ): PipeReturn6<
   () => Promise<
     Union.Select<
@@ -549,12 +551,12 @@ export function pipe<
   R5,
   R6,
 >(
-  fn0: (x: V0) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>
+  fn0: (x: V0) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>
 ): PipeReturn6<
   (
     x: V0
@@ -594,12 +596,12 @@ export function pipe<
   R5,
   R6,
 >(
-  fn0: (x0: V0, x1: V1) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>
+  fn0: (x0: V0, x1: V1) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>
 ): PipeReturn6<
   (
     x0: V0,
@@ -641,12 +643,12 @@ export function pipe<
   R5,
   R6,
 >(
-  fn0: (x0: V0, x1: V1, x2: V2) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>
+  fn0: (x0: V0, x1: V1, x2: V2) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>
 ): PipeReturn6<
   (
     x0: V0,
@@ -690,13 +692,13 @@ export function pipe<
   R6,
   R7,
 >(
-  fn0: () => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>
+  fn0: () => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>
 ): PipeReturn7<
   () => Promise<
     Union.Select<
@@ -737,13 +739,13 @@ export function pipe<
   R6,
   R7,
 >(
-  fn0: (x: V0) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>
+  fn0: (x: V0) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>
 ): PipeReturn7<
   (
     x: V0
@@ -787,13 +789,13 @@ export function pipe<
   R6,
   R7,
 >(
-  fn0: (x0: V0, x1: V1) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>
+  fn0: (x0: V0, x1: V1) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>
 ): PipeReturn7<
   (
     x0: V0,
@@ -839,13 +841,13 @@ export function pipe<
   R6,
   R7,
 >(
-  fn0: (x0: V0, x1: V1, x2: V2) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>
+  fn0: (x0: V0, x1: V1, x2: V2) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>
 ): PipeReturn7<
   (
     x0: V0,
@@ -893,14 +895,14 @@ export function pipe<
   R7,
   R8,
 >(
-  fn0: () => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>,
-  fn7: (x: T7, l: L7) => FnReturn<T8, L8, R8>
+  fn0: () => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>,
+  fn7: (x: T7, l: L7) => PipeFuncReturn<T8, L8, R8>
 ): PipeReturn8<
   () => Promise<
     Union.Select<
@@ -945,14 +947,14 @@ export function pipe<
   R7,
   R8,
 >(
-  fn0: (x: V0) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>,
-  fn7: (x: T7, l: L7) => FnReturn<T8, L8, R8>
+  fn0: (x: V0) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>,
+  fn7: (x: T7, l: L7) => PipeFuncReturn<T8, L8, R8>
 ): PipeReturn8<
   (
     x: V0
@@ -1000,14 +1002,14 @@ export function pipe<
   R7,
   R8,
 >(
-  fn0: (x0: V0, x1: V1) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>,
-  fn7: (x: T7, l: L7) => FnReturn<T8, L8, R8>
+  fn0: (x0: V0, x1: V1) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>,
+  fn7: (x: T7, l: L7) => PipeFuncReturn<T8, L8, R8>
 ): PipeReturn8<
   (
     x0: V0,
@@ -1057,14 +1059,14 @@ export function pipe<
   R7,
   R8,
 >(
-  fn0: (x0: V0, x1: V1, x2: V2) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>,
-  fn7: (x: T7, l: L7) => FnReturn<T8, L8, R8>
+  fn0: (x0: V0, x1: V1, x2: V2) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>,
+  fn7: (x: T7, l: L7) => PipeFuncReturn<T8, L8, R8>
 ): PipeReturn8<
   (
     x0: V0,
@@ -1116,15 +1118,15 @@ export function pipe<
   R8,
   R9,
 >(
-  fn0: () => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>,
-  fn7: (x: T7, l: L7) => FnReturn<T8, L8, R8>,
-  fn8: (x: T8, l: L8) => FnReturn<T9, L9, R9>
+  fn0: () => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>,
+  fn7: (x: T7, l: L7) => PipeFuncReturn<T8, L8, R8>,
+  fn8: (x: T8, l: L8) => PipeFuncReturn<T9, L9, R9>
 ): PipeReturn9<
   () => Promise<
     Union.Select<
@@ -1173,15 +1175,15 @@ export function pipe<
   R8,
   R9,
 >(
-  fn0: (x0: V0) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>,
-  fn7: (x: T7, l: L7) => FnReturn<T8, L8, R8>,
-  fn8: (x: T8, l: L8) => FnReturn<T9, L9, R9>
+  fn0: (x0: V0) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>,
+  fn7: (x: T7, l: L7) => PipeFuncReturn<T8, L8, R8>,
+  fn8: (x: T8, l: L8) => PipeFuncReturn<T9, L9, R9>
 ): PipeReturn9<
   (
     x0: V0
@@ -1233,15 +1235,15 @@ export function pipe<
   R8,
   R9,
 >(
-  fn0: (x0: V0, x1: V1) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>,
-  fn7: (x: T7, l: L7) => FnReturn<T8, L8, R8>,
-  fn8: (x: T8, l: L8) => FnReturn<T9, L9, R9>
+  fn0: (x0: V0, x1: V1) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>,
+  fn7: (x: T7, l: L7) => PipeFuncReturn<T8, L8, R8>,
+  fn8: (x: T8, l: L8) => PipeFuncReturn<T9, L9, R9>
 ): PipeReturn9<
   (
     x0: V0,
@@ -1295,15 +1297,15 @@ export function pipe<
   R8,
   R9,
 >(
-  fn0: (x0: V0, x1: V1, x2: V2) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>,
-  fn7: (x: T7, l: L7) => FnReturn<T8, L8, R8>,
-  fn8: (x: T8, l: L8) => FnReturn<T9, L9, R9>
+  fn0: (x0: V0, x1: V1, x2: V2) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>,
+  fn7: (x: T7, l: L7) => PipeFuncReturn<T8, L8, R8>,
+  fn8: (x: T8, l: L8) => PipeFuncReturn<T9, L9, R9>
 ): PipeReturn9<
   (
     x0: V0,
@@ -1359,16 +1361,16 @@ export function pipe<
   R9,
   R10,
 >(
-  fn0: () => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>,
-  fn7: (x: T7, l: L7) => FnReturn<T8, L8, R8>,
-  fn8: (x: T8, l: L8) => FnReturn<T9, L9, R9>,
-  fn9: (x: T9, l: L9) => FnReturn<T10, L10, R10>
+  fn0: () => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>,
+  fn7: (x: T7, l: L7) => PipeFuncReturn<T8, L8, R8>,
+  fn8: (x: T8, l: L8) => PipeFuncReturn<T9, L9, R9>,
+  fn9: (x: T9, l: L9) => PipeFuncReturn<T10, L10, R10>
 ): PipeReturn10<
   () => Promise<
     Union.Select<
@@ -1421,16 +1423,16 @@ export function pipe<
   R9,
   R10,
 >(
-  fn0: (x0: V0) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>,
-  fn7: (x: T7, l: L7) => FnReturn<T8, L8, R8>,
-  fn8: (x: T8, l: L8) => FnReturn<T9, L9, R9>,
-  fn9: (x: T9, l: L9) => FnReturn<T10, L10, R10>
+  fn0: (x0: V0) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>,
+  fn7: (x: T7, l: L7) => PipeFuncReturn<T8, L8, R8>,
+  fn8: (x: T8, l: L8) => PipeFuncReturn<T9, L9, R9>,
+  fn9: (x: T9, l: L9) => PipeFuncReturn<T10, L10, R10>
 ): PipeReturn10<
   (
     x0: V0
@@ -1486,16 +1488,16 @@ export function pipe<
   R9,
   R10,
 >(
-  fn0: (x0: V0, x1: V1) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>,
-  fn7: (x: T7, l: L7) => FnReturn<T8, L8, R8>,
-  fn8: (x: T8, l: L8) => FnReturn<T9, L9, R9>,
-  fn9: (x: T9, l: L9) => FnReturn<T10, L10, R10>
+  fn0: (x0: V0, x1: V1) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>,
+  fn7: (x: T7, l: L7) => PipeFuncReturn<T8, L8, R8>,
+  fn8: (x: T8, l: L8) => PipeFuncReturn<T9, L9, R9>,
+  fn9: (x: T9, l: L9) => PipeFuncReturn<T10, L10, R10>
 ): PipeReturn10<
   (
     x0: V0,
@@ -1553,16 +1555,16 @@ export function pipe<
   R9,
   R10,
 >(
-  fn0: (x0: V0, x1: V1, x2: V2) => FnReturn<T1, L1, R1>,
-  fn1: (x: T1, l: L1) => FnReturn<T2, L2, R2>,
-  fn2: (x: T2, l: L2) => FnReturn<T3, L3, R3>,
-  fn3: (x: T3, l: L3) => FnReturn<T4, L4, R4>,
-  fn4: (x: T4, l: L4) => FnReturn<T5, L5, R5>,
-  fn5: (x: T5, l: L5) => FnReturn<T6, L6, R6>,
-  fn6: (x: T6, l: L6) => FnReturn<T7, L7, R7>,
-  fn7: (x: T7, l: L7) => FnReturn<T8, L8, R8>,
-  fn8: (x: T8, l: L8) => FnReturn<T9, L9, R9>,
-  fn9: (x: T9, l: L9) => FnReturn<T10, L10, R10>
+  fn0: (x0: V0, x1: V1, x2: V2) => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>,
+  fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>,
+  fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>,
+  fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>,
+  fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>,
+  fn7: (x: T7, l: L7) => PipeFuncReturn<T8, L8, R8>,
+  fn8: (x: T8, l: L8) => PipeFuncReturn<T9, L9, R9>,
+  fn9: (x: T9, l: L9) => PipeFuncReturn<T10, L10, R10>
 ): PipeReturn10<
   (
     x0: V0,
@@ -1598,7 +1600,7 @@ export function pipe(
       Array.from(beforeAllFns.values()).map((f) => f(fnsStr, ...args))
     );
     return pipeWith(
-      async (fn, res) =>
+      async (fn: Function, res: unknown) =>
         isPromise(res) ? res.then((x) => compose(fn, x)) : compose(fn, res),
       [
         ...fns.map(
@@ -1659,11 +1661,11 @@ export function exitPipe<T>(r: T) {
   return exitPipeReturnValue;
 }
 
-export function beforeAll(fn: AopCallback) {
+export function beforeAll(fn: PipeCallback) {
   beforeAllFns.add(fn);
 }
 
-export function afterAll(fn: AopCallback) {
+export function afterAll(fn: PipeCallback) {
   afterAllFns.add(fn);
 }
 
