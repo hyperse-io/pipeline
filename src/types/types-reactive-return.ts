@@ -1,12 +1,10 @@
-import { Either as FpTsEither } from 'fp-ts/Either';
 import type { Either, Maybe, Validation } from 'monet';
-import type {
-  Either as PurifyEither,
-  EitherAsync,
-  Maybe as PurifyMaybe,
-  MaybeAsync,
-} from 'purify-ts';
-import { ExitPipeReturnValue } from './types-reactive.js';
+import type { FpTsEither } from './types-fp-ts.js';
+import type { Either as PurifyEither } from './types-purify-either.js';
+import type { EitherAsync } from './types-purify-either-async.js';
+import type { Maybe as PurifyMaybe } from './types-purify-maybe.js';
+import type { MaybeAsync } from './types-purify-maybe-async.js';
+import type { ExitPipeReturnValue } from './types-reactive.js';
 
 export type PipeFuncReturn<T, L, R> =
   | Promise<

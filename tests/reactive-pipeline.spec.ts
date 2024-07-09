@@ -1,12 +1,4 @@
-import { left, right } from 'fp-ts/Either';
 import { Either, Maybe, Validation } from 'monet';
-import {
-  Either as PurifyEither,
-  EitherAsync,
-  Left as PurifyLeft,
-  Maybe as PurifyMaybe,
-  MaybeAsync,
-} from 'purify-ts';
 import {
   afterAll as aa,
   beforeAll as ba,
@@ -17,6 +9,14 @@ import {
   pipe,
   pipeContext,
 } from '../src/index.js';
+import { fpTsLeft, fpTsRight } from '../src/types/types-fp-ts.js';
+import {
+  Either as PurifyEither,
+  Left as PurifyLeft,
+} from '../src/types/types-purify-either.js';
+import { EitherAsync } from '../src/types/types-purify-either-async.js';
+import { Maybe as PurifyMaybe } from '../src/types/types-purify-maybe.js';
+import { MaybeAsync } from '../src/types/types-purify-maybe-async.js';
 
 describe('Rocket pipes tests', () => {
   describe('Simple', () => {
@@ -637,7 +637,7 @@ describe('Rocket pipes tests', () => {
   describe('fp-ts Either', () => {
     it('Either right passthrough test', async () => {
       const resp = await pipe(
-        () => right(123),
+        () => fpTsRight(123),
         (n) => n + 1
       )();
       expect(resp + 1).toEqual(125);
@@ -645,7 +645,7 @@ describe('Rocket pipes tests', () => {
 
     it('Either right in promise passthrough test', async () => {
       const resp = await pipe(
-        () => Promise.resolve(right(123)),
+        () => Promise.resolve(fpTsRight(123)),
         (n) => n + 1
       )();
       expect(resp + 1).toEqual(125);
@@ -653,15 +653,15 @@ describe('Rocket pipes tests', () => {
 
     it('Either right result test', async () => {
       const resp = await pipe(
-        () => Promise.resolve(left(123)),
-        (_, l) => right(l + 1)
+        () => Promise.resolve(fpTsLeft(123)),
+        (_, l) => fpTsRight(l + 1)
       )();
       expect(resp + 1).toEqual(125);
     });
 
     it('Either left test', async () => {
       const resp = await pipe(
-        () => left(123),
+        () => fpTsLeft(123),
         (_, l) => l + 1
       )();
       expect(resp + 1).toEqual(125);
@@ -669,7 +669,7 @@ describe('Rocket pipes tests', () => {
 
     it('Either left in promise test', async () => {
       const resp = await pipe(
-        () => Promise.resolve(left(123)),
+        () => Promise.resolve(fpTsLeft(123)),
         (_, l) => l + 1
       )();
       expect(resp + 1).toEqual(125);
@@ -677,8 +677,8 @@ describe('Rocket pipes tests', () => {
 
     it('Either left result test', async () => {
       const resp = await pipe(
-        () => Promise.resolve(left(123)),
-        (_, l) => left(l + 1)
+        () => Promise.resolve(fpTsLeft(123)),
+        (_, l) => fpTsLeft(l + 1)
       )();
       expect(resp + 1).toEqual(125);
     });

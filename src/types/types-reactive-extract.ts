@@ -1,86 +1,76 @@
-import type { Union } from 'ts-toolbelt';
-import { Exists, ExitPipeReturnValue } from './types-reactive.js';
+import type { Exists, ExitPipeReturnValue } from './types-reactive.js';
+import type { Select } from './types-union.js';
 
 export type ExtractExitPipe1<R1> =
-  Union.Select<R1, Exists, 'extends->'> extends never
+  Select<R1, Exists, 'extends->'> extends never
     ? never
-    : ExitPipeReturnValue<Union.Select<R1, Exists, 'extends->'>>;
+    : ExitPipeReturnValue<Select<R1, Exists, 'extends->'>>;
 
 export type ExtractExitPipe2<R2, R1> =
-  Union.Select<R2 | R1, Exists, 'extends->'> extends never
+  Select<R2 | R1, Exists, 'extends->'> extends never
     ? never
-    : ExitPipeReturnValue<Union.Select<R2 | R1, Exists, 'extends->'>>;
+    : ExitPipeReturnValue<Select<R2 | R1, Exists, 'extends->'>>;
 
 export type ExtractExitPipe3<R3, R2, R1> =
-  Union.Select<R3 | R2 | R1, Exists, 'extends->'> extends never
+  Select<R3 | R2 | R1, Exists, 'extends->'> extends never
     ? never
-    : ExitPipeReturnValue<Union.Select<R3 | R2 | R1, Exists, 'extends->'>>;
+    : ExitPipeReturnValue<Select<R3 | R2 | R1, Exists, 'extends->'>>;
 
 export type ExtractExitPipe4<R4, R3, R2, R1> =
-  Union.Select<R4 | R3 | R2 | R1, Exists, 'extends->'> extends never
+  Select<R4 | R3 | R2 | R1, Exists, 'extends->'> extends never
     ? never
-    : ExitPipeReturnValue<Union.Select<R4 | R3 | R2 | R1, Exists, 'extends->'>>;
+    : ExitPipeReturnValue<Select<R4 | R3 | R2 | R1, Exists, 'extends->'>>;
 
 export type ExtractExitPipe5<R5, R4, R3, R2, R1> =
-  Union.Select<R5 | R4 | R3 | R2 | R1, Exists, 'extends->'> extends never
+  Select<R5 | R4 | R3 | R2 | R1, Exists, 'extends->'> extends never
     ? never
-    : ExitPipeReturnValue<
-        Union.Select<R5 | R4 | R3 | R2 | R1, Exists, 'extends->'>
-      >;
+    : ExitPipeReturnValue<Select<R5 | R4 | R3 | R2 | R1, Exists, 'extends->'>>;
 
 export type ExtractExitPipe6<R6, R5, R4, R3, R2, R1> =
-  Union.Select<R6 | R5 | R4 | R3 | R2 | R1, Exists, 'extends->'> extends never
+  Select<R6 | R5 | R4 | R3 | R2 | R1, Exists, 'extends->'> extends never
     ? never
     : ExitPipeReturnValue<
-        Union.Select<R6 | R5 | R4 | R3 | R2 | R1, Exists, 'extends->'>
+        Select<R6 | R5 | R4 | R3 | R2 | R1, Exists, 'extends->'>
       >;
 
 export type ExtractExitPipe7<R7, R6, R5, R4, R3, R2, R1> =
-  Union.Select<
-    R7 | R6 | R5 | R4 | R3 | R2 | R1,
-    Exists,
-    'extends->'
-  > extends never
+  Select<R7 | R6 | R5 | R4 | R3 | R2 | R1, Exists, 'extends->'> extends never
     ? never
     : ExitPipeReturnValue<
-        Union.Select<R7 | R6 | R5 | R4 | R3 | R2 | R1, Exists, 'extends->'>
+        Select<R7 | R6 | R5 | R4 | R3 | R2 | R1, Exists, 'extends->'>
       >;
 
 export type ExtractExitPipe8<R8, R7, R6, R5, R4, R3, R2, R1> =
-  Union.Select<
+  Select<
     R8 | R7 | R6 | R5 | R4 | R3 | R2 | R1,
     Exists,
     'extends->'
   > extends never
     ? never
     : ExitPipeReturnValue<
-        Union.Select<R8 | R7 | R6 | R5 | R4 | R3 | R2 | R1, Exists, 'extends->'>
+        Select<R8 | R7 | R6 | R5 | R4 | R3 | R2 | R1, Exists, 'extends->'>
       >;
 
 export type ExtractExitPipe9<R9, R8, R7, R6, R5, R4, R3, R2, R1> =
-  Union.Select<
+  Select<
     R9 | R8 | R7 | R6 | R5 | R4 | R3 | R2 | R1,
     Exists,
     'extends->'
   > extends never
     ? never
     : ExitPipeReturnValue<
-        Union.Select<
-          R9 | R8 | R7 | R6 | R5 | R4 | R3 | R2 | R1,
-          Exists,
-          'extends->'
-        >
+        Select<R9 | R8 | R7 | R6 | R5 | R4 | R3 | R2 | R1, Exists, 'extends->'>
       >;
 
 export type ExtractExitPipe10<R10, R9, R8, R7, R6, R5, R4, R3, R2, R1> =
-  Union.Select<
+  Select<
     R10 | R9 | R8 | R7 | R6 | R5 | R4 | R3 | R2 | R1,
     Exists,
     'extends->'
   > extends never
     ? never
     : ExitPipeReturnValue<
-        Union.Select<
+        Select<
           R10 | R9 | R8 | R7 | R6 | R5 | R4 | R3 | R2 | R1,
           Exists,
           'extends->'

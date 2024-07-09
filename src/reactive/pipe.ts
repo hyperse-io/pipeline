@@ -1,7 +1,6 @@
-import { fold } from 'fp-ts/Either';
-import type { Union } from 'ts-toolbelt';
 import { isPromise } from '../helpers/helper-is-promise.js';
 import { pipeWith } from '../helpers/helper-pipe-with.js';
+import { fold } from '../types/types-fp-ts.js';
 import {
   Exists,
   ExitPipeReturnValue,
@@ -13,7 +12,7 @@ import {
   isPurifyMaybeAsync,
   PipeCallback,
 } from '../types/types-reactive.js';
-import {
+import type {
   ExtractExitPipe1,
   ExtractExitPipe2,
   ExtractExitPipe3,
@@ -25,7 +24,7 @@ import {
   ExtractExitPipe9,
   ExtractExitPipe10,
 } from '../types/types-reactive-extract.js';
-import {
+import type {
   PipeFuncReturn,
   PipeReturn1,
   PipeReturn2,
@@ -38,6 +37,7 @@ import {
   PipeReturn9,
   PipeReturn10,
 } from '../types/types-reactive-return.js';
+import type { Select } from '../types/types-union.js';
 
 const pipeSymbol = Symbol('pipe');
 const pipeContextFns = new WeakSet();
@@ -84,9 +84,7 @@ const compose = (fn: Function, res: unknown): unknown => {
 export function pipe<T1, L1, R1>(
   fn0: () => PipeFuncReturn<T1, L1, R1>
 ): PipeReturn1<
-  () => Promise<
-    Union.Select<ExtractExitPipe1<R1> | L1 | T1, Exists, 'extends->'>
-  >,
+  () => Promise<Select<ExtractExitPipe1<R1> | L1 | T1, Exists, 'extends->'>>,
   typeof fn0
 >;
 export function pipe<V0, T1, L1, R1>(
@@ -94,9 +92,7 @@ export function pipe<V0, T1, L1, R1>(
 ): PipeReturn1<
   (
     x0: V0
-  ) => Promise<
-    Union.Select<ExtractExitPipe1<R1> | L1 | T1, Exists, 'extends->'>
-  >,
+  ) => Promise<Select<ExtractExitPipe1<R1> | L1 | T1, Exists, 'extends->'>>,
   typeof fn0
 >;
 export function pipe<V0, V1, T1, L1, R1>(
@@ -105,9 +101,7 @@ export function pipe<V0, V1, T1, L1, R1>(
   (
     x0: V0,
     x1: V1
-  ) => Promise<
-    Union.Select<ExtractExitPipe1<R1> | L1 | T1, Exists, 'extends->'>
-  >,
+  ) => Promise<Select<ExtractExitPipe1<R1> | L1 | T1, Exists, 'extends->'>>,
   typeof fn0
 >;
 export function pipe<V0, V1, V2, T1, L1, R1>(
@@ -117,9 +111,7 @@ export function pipe<V0, V1, V2, T1, L1, R1>(
     x0: V0,
     x1: V1,
     x2: V2
-  ) => Promise<
-    Union.Select<ExtractExitPipe1<R1> | L1 | T1, Exists, 'extends->'>
-  >,
+  ) => Promise<Select<ExtractExitPipe1<R1> | L1 | T1, Exists, 'extends->'>>,
   typeof fn0
 >;
 
@@ -128,7 +120,7 @@ export function pipe<T1, T2, L1, L2, R1, R2>(
   fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>
 ): PipeReturn2<
   () => Promise<
-    Union.Select<ExtractExitPipe2<R2, R1> | L2 | T2, Exists, 'extends->'>
+    Select<ExtractExitPipe2<R2, R1> | L2 | T2, Exists, 'extends->'>
   >,
   typeof fn0,
   typeof fn1
@@ -139,9 +131,7 @@ export function pipe<V0, T1, T2, L1, L2, R1, R2>(
 ): PipeReturn2<
   (
     x0: V0
-  ) => Promise<
-    Union.Select<ExtractExitPipe2<R2, R1> | L2 | T2, Exists, 'extends->'>
-  >,
+  ) => Promise<Select<ExtractExitPipe2<R2, R1> | L2 | T2, Exists, 'extends->'>>,
   typeof fn0,
   typeof fn1
 >;
@@ -152,9 +142,7 @@ export function pipe<V0, V1, T1, T2, L1, L2, R1, R2>(
   (
     x0: V0,
     x1: V1
-  ) => Promise<
-    Union.Select<ExtractExitPipe2<R2, R1> | L2 | T2, Exists, 'extends->'>
-  >,
+  ) => Promise<Select<ExtractExitPipe2<R2, R1> | L2 | T2, Exists, 'extends->'>>,
   typeof fn0,
   typeof fn1
 >;
@@ -166,9 +154,7 @@ export function pipe<V0, V1, V2, T1, T2, L1, L2, R1, R2>(
     x0: V0,
     x1: V1,
     x2: V2
-  ) => Promise<
-    Union.Select<ExtractExitPipe2<R2, R1> | L2 | T2, Exists, 'extends->'>
-  >,
+  ) => Promise<Select<ExtractExitPipe2<R2, R1> | L2 | T2, Exists, 'extends->'>>,
   typeof fn0,
   typeof fn1
 >;
@@ -179,7 +165,7 @@ export function pipe<T1, T2, T3, L1, L2, L3, R1, R2, R3>(
   fn2: (x: T2, l: L2) => PipeFuncReturn<T3, L3, R3>
 ): PipeReturn3<
   () => Promise<
-    Union.Select<ExtractExitPipe3<R3, R2, R1> | L3 | T3, Exists, 'extends->'>
+    Select<ExtractExitPipe3<R3, R2, R1> | L3 | T3, Exists, 'extends->'>
   >,
   typeof fn0,
   typeof fn1,
@@ -193,7 +179,7 @@ export function pipe<V0, T1, T2, T3, L1, L2, L3, R1, R2, R3>(
   (
     x: V0
   ) => Promise<
-    Union.Select<ExtractExitPipe3<R3, R2, R1> | L3 | T3, Exists, 'extends->'>
+    Select<ExtractExitPipe3<R3, R2, R1> | L3 | T3, Exists, 'extends->'>
   >,
   typeof fn0,
   typeof fn1,
@@ -208,7 +194,7 @@ export function pipe<V0, V1, T1, T2, T3, L1, L2, L3, R1, R2, R3>(
     x0: V0,
     x1: V1
   ) => Promise<
-    Union.Select<ExtractExitPipe3<R3, R2, R1> | L3 | T3, Exists, 'extends->'>
+    Select<ExtractExitPipe3<R3, R2, R1> | L3 | T3, Exists, 'extends->'>
   >,
   typeof fn0,
   typeof fn1,
@@ -224,7 +210,7 @@ export function pipe<V0, V1, V2, T1, T2, T3, L1, L2, L3, R1, R2, R3>(
     x1: V1,
     x2: V2
   ) => Promise<
-    Union.Select<ExtractExitPipe3<R3, R2, R1> | L3 | T3, Exists, 'extends->'>
+    Select<ExtractExitPipe3<R3, R2, R1> | L3 | T3, Exists, 'extends->'>
   >,
   typeof fn0,
   typeof fn1,
@@ -238,11 +224,7 @@ export function pipe<T1, T2, T3, T4, L1, L2, L3, L4, R1, R2, R3, R4>(
   fn3: (x: T3, l: L3) => PipeFuncReturn<T4, L4, R4>
 ): PipeReturn4<
   () => Promise<
-    Union.Select<
-      ExtractExitPipe4<R4, R3, R2, R1> | L4 | T4,
-      Exists,
-      'extends->'
-    >
+    Select<ExtractExitPipe4<R4, R3, R2, R1> | L4 | T4, Exists, 'extends->'>
   >,
   typeof fn0,
   typeof fn1,
@@ -258,11 +240,7 @@ export function pipe<V0, T1, T2, T3, T4, L1, L2, L3, L4, R1, R2, R3, R4>(
   (
     x: V0
   ) => Promise<
-    Union.Select<
-      ExtractExitPipe4<R4, R3, R2, R1> | L4 | T4,
-      Exists,
-      'extends->'
-    >
+    Select<ExtractExitPipe4<R4, R3, R2, R1> | L4 | T4, Exists, 'extends->'>
   >,
   typeof fn0,
   typeof fn1,
@@ -279,11 +257,7 @@ export function pipe<V0, V1, T1, T2, T3, T4, L1, L2, L3, L4, R1, R2, R3, R4>(
     x0: V0,
     x1: V1
   ) => Promise<
-    Union.Select<
-      ExtractExitPipe4<R4, R3, R2, R1> | L4 | T4,
-      Exists,
-      'extends->'
-    >
+    Select<ExtractExitPipe4<R4, R3, R2, R1> | L4 | T4, Exists, 'extends->'>
   >,
   typeof fn0,
   typeof fn1,
@@ -317,11 +291,7 @@ export function pipe<
     x1: V1,
     x2: V2
   ) => Promise<
-    Union.Select<
-      ExtractExitPipe4<R4, R3, R2, R1> | L4 | T4,
-      Exists,
-      'extends->'
-    >
+    Select<ExtractExitPipe4<R4, R3, R2, R1> | L4 | T4, Exists, 'extends->'>
   >,
   typeof fn0,
   typeof fn1,
@@ -353,11 +323,7 @@ export function pipe<
   fn4: (x: T4, l: L4) => PipeFuncReturn<T5, L5, R5>
 ): PipeReturn5<
   () => Promise<
-    Union.Select<
-      ExtractExitPipe5<R5, R4, R3, R2, R1> | L5 | T5,
-      Exists,
-      'extends->'
-    >
+    Select<ExtractExitPipe5<R5, R4, R3, R2, R1> | L5 | T5, Exists, 'extends->'>
   >,
   typeof fn0,
   typeof fn1,
@@ -392,11 +358,7 @@ export function pipe<
   (
     x: V0
   ) => Promise<
-    Union.Select<
-      ExtractExitPipe5<R5, R4, R3, R2, R1> | L5 | T5,
-      Exists,
-      'extends->'
-    >
+    Select<ExtractExitPipe5<R5, R4, R3, R2, R1> | L5 | T5, Exists, 'extends->'>
   >,
   typeof fn0,
   typeof fn1,
@@ -433,11 +395,7 @@ export function pipe<
     x0: V0,
     x1: V1
   ) => Promise<
-    Union.Select<
-      ExtractExitPipe5<R5, R4, R3, R2, R1> | L5 | T5,
-      Exists,
-      'extends->'
-    >
+    Select<ExtractExitPipe5<R5, R4, R3, R2, R1> | L5 | T5, Exists, 'extends->'>
   >,
   typeof fn0,
   typeof fn1,
@@ -476,11 +434,7 @@ export function pipe<
     x1: V1,
     x2: V2
   ) => Promise<
-    Union.Select<
-      ExtractExitPipe5<R5, R4, R3, R2, R1> | L5 | T5,
-      Exists,
-      'extends->'
-    >
+    Select<ExtractExitPipe5<R5, R4, R3, R2, R1> | L5 | T5, Exists, 'extends->'>
   >,
   typeof fn0,
   typeof fn1,
@@ -517,7 +471,7 @@ export function pipe<
   fn5: (x: T5, l: L5) => PipeFuncReturn<T6, L6, R6>
 ): PipeReturn6<
   () => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe6<R6, R5, R4, R3, R2, R1> | L6 | T6,
       Exists,
       'extends->'
@@ -561,7 +515,7 @@ export function pipe<
   (
     x: V0
   ) => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe6<R6, R5, R4, R3, R2, R1> | L6 | T6,
       Exists,
       'extends->'
@@ -607,7 +561,7 @@ export function pipe<
     x0: V0,
     x1: V1
   ) => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe6<R6, R5, R4, R3, R2, R1> | L6 | T6,
       Exists,
       'extends->'
@@ -655,7 +609,7 @@ export function pipe<
     x1: V1,
     x2: V2
   ) => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe6<R6, R5, R4, R3, R2, R1> | L6 | T6,
       Exists,
       'extends->'
@@ -701,7 +655,7 @@ export function pipe<
   fn6: (x: T6, l: L6) => PipeFuncReturn<T7, L7, R7>
 ): PipeReturn7<
   () => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe7<R7, R6, R5, R4, R3, R2, R1> | L7 | T7,
       Exists,
       'extends->'
@@ -750,7 +704,7 @@ export function pipe<
   (
     x: V0
   ) => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe7<R7, R6, R5, R4, R3, R2, R1> | L7 | T7,
       Exists,
       'extends->'
@@ -801,7 +755,7 @@ export function pipe<
     x0: V0,
     x1: V1
   ) => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe7<R7, R6, R5, R4, R3, R2, R1> | L7 | T7,
       Exists,
       'extends->'
@@ -854,7 +808,7 @@ export function pipe<
     x1: V1,
     x2: V2
   ) => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe7<R7, R6, R5, R4, R3, R2, R1> | L7 | T7,
       Exists,
       'extends->'
@@ -905,7 +859,7 @@ export function pipe<
   fn7: (x: T7, l: L7) => PipeFuncReturn<T8, L8, R8>
 ): PipeReturn8<
   () => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe8<R8, R7, R6, R5, R4, R3, R2, R1> | L8 | T8,
       Exists,
       'extends->'
@@ -959,7 +913,7 @@ export function pipe<
   (
     x: V0
   ) => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe8<R8, R7, R6, R5, R4, R3, R2, R1> | L8 | T8,
       Exists,
       'extends->'
@@ -1015,7 +969,7 @@ export function pipe<
     x0: V0,
     x1: V1
   ) => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe8<R8, R7, R6, R5, R4, R3, R2, R1> | L8 | T8,
       Exists,
       'extends->'
@@ -1073,7 +1027,7 @@ export function pipe<
     x1: V1,
     x2: V2
   ) => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe8<R8, R7, R6, R5, R4, R3, R2, R1> | L8 | T8,
       Exists,
       'extends->'
@@ -1129,7 +1083,7 @@ export function pipe<
   fn8: (x: T8, l: L8) => PipeFuncReturn<T9, L9, R9>
 ): PipeReturn9<
   () => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe9<R9, R8, R7, R6, R5, R4, R3, R2, R1> | L9 | T9,
       Exists,
       'extends->'
@@ -1188,7 +1142,7 @@ export function pipe<
   (
     x0: V0
   ) => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe9<R9, R8, R7, R6, R5, R4, R3, R2, R1> | L9 | T9,
       Exists,
       'extends->'
@@ -1249,7 +1203,7 @@ export function pipe<
     x0: V0,
     x1: V1
   ) => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe9<R9, R8, R7, R6, R5, R4, R3, R2, R1> | L9 | T9,
       Exists,
       'extends->'
@@ -1312,7 +1266,7 @@ export function pipe<
     x1: V1,
     x2: V2
   ) => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe9<R9, R8, R7, R6, R5, R4, R3, R2, R1> | L9 | T9,
       Exists,
       'extends->'
@@ -1373,7 +1327,7 @@ export function pipe<
   fn9: (x: T9, l: L9) => PipeFuncReturn<T10, L10, R10>
 ): PipeReturn10<
   () => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe10<R10, R9, R8, R7, R6, R5, R4, R3, R2, R1> | L10 | T10,
       Exists,
       'extends->'
@@ -1437,7 +1391,7 @@ export function pipe<
   (
     x0: V0
   ) => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe10<R10, R9, R8, R7, R6, R5, R4, R3, R2, R1> | L10 | T10,
       Exists,
       'extends->'
@@ -1503,7 +1457,7 @@ export function pipe<
     x0: V0,
     x1: V1
   ) => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe10<R10, R9, R8, R7, R6, R5, R4, R3, R2, R1> | L10 | T10,
       Exists,
       'extends->'
@@ -1571,7 +1525,7 @@ export function pipe<
     x1: V1,
     x2: V2
   ) => Promise<
-    Union.Select<
+    Select<
       ExtractExitPipe10<R10, R9, R8, R7, R6, R5, R4, R3, R2, R1> | L10 | T10,
       Exists,
       'extends->'
