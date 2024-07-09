@@ -94,7 +94,7 @@ expect(resp + 1).toEqual(125);
 ```ts
 const resp = await pipe(
   () => 123,
-  pc((ctx: { n: number }) => (n) => n + ctx.n),
+  pipeContext((ctx: { n: number }) => (n) => n + ctx.n),
   (n) => n + 1
 ).context({ n: 1 })();
 expect(resp + 1).toEqual(126);
@@ -105,10 +105,12 @@ expect(resp + 1).toEqual(126);
 ```ts
 const resp = await pipe(
   () => 123,
-  (n) => ep(n + 1),
-  (n) => 'qwe'
+  (n) => exitPipe(n + 1),
+  () => 'qwe'
 )();
-iep(resp) && expect(resp.r + 1).toEqual(125);
+if (isExitPipeValue(resp)) {
+  expect(resp.r + 1).toEqual(125);
+}
 ```
 
 - Dynamically replace nodes in the pipeline (❗ mutable)
@@ -118,35 +120,9 @@ const fn = pipe(
   () => 123,
   (n) => n + 1
 );
-const resp = await fn.replace([[0, () => 124]])();
-expect(resp + 1).toEqual(126);
-
+fn.replace([[0, () => 124]]);
 fn.replaceUndo();
-expect(await fn()).toEqual(125);
-```
-
-- AOP beforeAll/afterAll hooks
-
-```ts
-beforeAll((label, n) => {
-  expect(label).toEqual('(n) => n + 1\n(n) => n + 1');
-  expect(n).toEqual(123);
-});
-afterAll((label, n) => {
-  expect(label).toEqual('(n) => n + 1\n(n) => n + 1');
-  expect(n).toEqual(125);
-});
-pipe(
-  (n: number) => n + 1,
-  (n) => n + 1
-)(123);
-```
-
-- AOP clear hooks
-
-```ts
-clearAfterAll();
-clearBeforeAll();
+expect((await fn()) + 1).toEqual(125);
 ```
 
 - Support promise
@@ -163,10 +139,13 @@ expect(resp + 1).toEqual(125);
 
 ```ts
 const resp = await pipe(
-  () => Promise.resolve(Either.right(123)),
-  (n) => n + 1
+  () => 123,
+  (n) => Promise.resolve(exitPipe(n + 1)),
+  () => 'qwe'
 )();
-expect(resp + 1).toEqual(125);
+if (isExitPipeValue(resp)) {
+  expect(resp.r + 1).toEqual(125);
+}
 ```
 
 ## Development
