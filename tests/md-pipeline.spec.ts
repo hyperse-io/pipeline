@@ -1,4 +1,4 @@
-import { Pipeline } from '../src/Pipeline.js';
+import { Pipeline } from '../src/middleware/Pipeline.js';
 
 describe('Pipeline tests', () => {
   interface TestContext {

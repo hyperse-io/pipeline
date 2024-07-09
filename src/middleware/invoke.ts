@@ -1,4 +1,4 @@
-import { Middleware } from './types.js';
+import { Middleware } from '../types/types-middleware.js';
 
 /**
  * Helper function for invoking a chain of middlewares on a context.
