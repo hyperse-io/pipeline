@@ -1,6 +1,6 @@
 {
   "name": "@hyperse/pipeline",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A middleware engine written in typescript",
   "keywords": [
     "hyperse",
