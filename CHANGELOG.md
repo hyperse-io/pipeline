@@ -1,5 +1,12 @@
 # @hyperse/pipeline
 
+## 1.0.3
+
+### Patch Changes
+
+- [#4](https://github.com/hyperse-io/pipeline/pull/4) [`369bcd4`](https://github.com/hyperse-io/pipeline/commit/369bcd4ef73741ff2b5f928d2571fe81541f7cef) Thanks [@tclxshunquan-wang](https://github.com/tclxshunquan-wang)! - 1、perfect readme.md
+  2、remove aop func
+
 ## 1.0.2
 
 ### Patch Changes
