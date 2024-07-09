@@ -125,13 +125,6 @@ fn.replaceUndo();
 expect((await fn()) + 1).toEqual(125);
 ```
 
-- AOP clear hooks
-
-```ts
-clearAfterAll();
-clearBeforeAll();
-```
-
 - Support promise
 
 ```ts

@@ -2,4 +2,5 @@
 "@hyperse/pipeline": patch
 ---
 
-perfect readme.md
+1、perfect readme.md
+2、remove aop func

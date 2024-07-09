@@ -1641,7 +1641,7 @@ export function exitPipe<T>(r: T) {
  *
  * @param fn - The callback function to be executed before all pipes.
  */
-export function beforeAll(fn: PipeCallback) {
+function beforeAll(fn: PipeCallback) {
   beforeAllFns.add(fn);
 }
 
@@ -1650,21 +1650,21 @@ export function beforeAll(fn: PipeCallback) {
  *
  * @param fn - The callback function to be executed.
  */
-export function afterAll(fn: PipeCallback) {
+function afterAll(fn: PipeCallback) {
   afterAllFns.add(fn);
 }
 
 /**
  * Clears all the functions registered in the `beforeAllFns` array.
  */
-export function clearBeforeAll() {
+function clearBeforeAll() {
   beforeAllFns.clear();
 }
 
 /**
  * Clears all the registered afterAll functions.
  */
-export function clearAfterAll() {
+function clearAfterAll() {
   afterAllFns.clear();
 }
 

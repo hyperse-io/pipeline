@@ -1,14 +1,5 @@
 import { Either, Maybe, Validation } from 'monet';
-import {
-  afterAll as aa,
-  beforeAll as ba,
-  clearAfterAll,
-  clearBeforeAll,
-  exitPipe,
-  isExitPipeValue,
-  pipe,
-  pipeContext,
-} from '../src/index.js';
+import { exitPipe, isExitPipeValue, pipe, pipeContext } from '../src/index.js';
 import { fpTsLeft, fpTsRight } from '../src/types/types-fp-ts.js';
 import {
   Either as PurifyEither,
@@ -238,39 +229,6 @@ describe('Rocket pipes tests', () => {
       )();
       expect(resp + 1).toEqual(125);
     });
-  });
-
-  describe('AOP', () => {
-    afterEach(() => {
-      clearAfterAll();
-      clearBeforeAll();
-    });
-
-    it('beforeAll', (): Promise<void> =>
-      new Promise((done) => {
-        ba((label, n) => {
-          expect(label).toEqual('(n) => n + 1\n(n) => n + 1');
-          expect(n).toEqual(123);
-          done();
-        });
-        pipe(
-          (n: number) => n + 1,
-          (n) => n + 1
-        )(123);
-      }));
-
-    it('afterAll', (): Promise<void> =>
-      new Promise((done) => {
-        aa((label, n) => {
-          expect(label).toEqual('(n) => n + 1\n(n) => n + 1');
-          expect(n).toEqual(125);
-          done();
-        });
-        pipe(
-          (n: number) => n + 1,
-          (n) => n + 1
-        )(123);
-      }));
   });
 
   describe('Monet Either', () => {
