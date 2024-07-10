@@ -11,11 +11,6 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
-  // Disable vscode formatting for js,jsx,ts,tsx files
-  // to allow dbaeumer.vscode-eslint to format them
-  "[javascript]": {
-    "editor.formatOnSave": false
-  },
   "[json]": {
     "editor.formatOnSave": false
   },
