@@ -1,5 +1,11 @@
 # @hyperse/pipeline
 
+## 1.0.4
+
+### Patch Changes
+
+- [#6](https://github.com/hyperse-io/pipeline/pull/6) [`f07a962`](https://github.com/hyperse-io/pipeline/commit/f07a962e96ab1c12b272446225c002a783dd0445) Thanks [@tclxshunquan-wang](https://github.com/tclxshunquan-wang)! - fixed typing could not prompt normally
+
 ## 1.0.3
 
 ### Patch Changes
