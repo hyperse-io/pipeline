@@ -8,7 +8,7 @@ const config: Config = {
   tagline:
     'A typed, smart, scalable , powerful data collection engine written in typescript',
   url: 'https://hyperse-io.github.io',
-  baseUrl: '/track',
+  baseUrl: '/pipeline',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: '/icon/favicon.ico',
