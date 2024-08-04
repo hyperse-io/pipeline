@@ -4,8 +4,8 @@
   <ShortName>hyperse pipeline</ShortName>
   <Description>Search hyperse pipeline</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Image width="16" height="16" type="image/x-icon">https://hyperse-io.github.io/track/icon/favicon.ico</Image>
-  <Url type="text/html" method="get" template="https://hyperse-io.github.io/track/search?q={searchTerms}"/>
-  <Url type="application/opensearchdescription+xml" rel="self" template="https://hyperse-io.github.io/track/opensearch.xml" />
-  <moz:SearchForm>https://hyperse-io.github.io/track/</moz:SearchForm>
+  <Image width="16" height="16" type="image/x-icon">https://hyperse-io.github.io/pipeline/icon/favicon.ico</Image>
+  <Url type="text/html" method="get" template="https://hyperse-io.github.io/pipeline/search?q={searchTerms}"/>
+  <Url type="application/opensearchdescription+xml" rel="self" template="https://hyperse-io.github.io/pipeline/opensearch.xml" />
+  <moz:SearchForm>https://hyperse-io.github.io/pipeline/</moz:SearchForm>
 </OpenSearchDescription>
