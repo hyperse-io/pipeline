@@ -11,6 +11,13 @@
     "noImplicitThis": false,
     "jsx": "preserve"
   },
-  "exclude": ["**/node_modules", "**/.*/", "dist", "build"],
+  "exclude": [
+    "**/node_modules",
+    "**/.*/",
+    "dist",
+    "build",
+    "**/website/**/*.ts",
+    "**/website/**/*.tsx"
+  ],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }
