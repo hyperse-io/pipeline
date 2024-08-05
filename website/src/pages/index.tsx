@@ -99,8 +99,8 @@ export default function Home() {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      title={`A middleware engine written in typescript, it will be used on a couples of projects, such as @hyperse/tracker`}
+      description={siteConfig.tagline}
     >
       <div className={styles.topBackground} />
       <HomepageHeader />
