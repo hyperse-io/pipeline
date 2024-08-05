@@ -6,12 +6,12 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
-import Docusaurus from '@site/static/img/docusaurus-splash.png';
+import LogoDark from '@site/static/img/logo-dark.svg';
+import LogoWhite from '@site/static/img/logo-white.svg';
 import Layout from '@theme/Layout';
 import TabItem from '@theme/TabItem';
 import Tabs from '@theme/Tabs';
 import styles from './index.module.css';
-
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   const [, copy] = useCopyToClipboard();
@@ -20,8 +20,11 @@ function HomepageHeader() {
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container text-center">
-        <img src={Docusaurus} className="max-w-[200px]" alt="MUI color input" />
-        <h1 className="hero__title">{siteConfig.title}</h1>
+        <div className="w-[200px] overflow-hidden mx-auto rounded-2xl">
+          <LogoDark className="w-[200px] hidden dark:block rounded-2xl overflow-hidden" />
+          <LogoWhite className="w-[200px] dark:hidden rounded-2xl overflow-hidden" />
+        </div>
+        <h1 className="hero__title mt-4">{siteConfig.title}</h1>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <iframe
           className="mt-2 h-[30px] w-[160px]"
