@@ -1,5 +1,12 @@
 # @hyperse/pipeline
 
+## 1.0.5
+
+### Patch Changes
+
+- [#8](https://github.com/hyperse-io/pipeline/pull/8) [`410948f`](https://github.com/hyperse-io/pipeline/commit/410948fdc4c48b53d1ea1c7ae2f075f09d739791) Thanks [@tclxshunquan-wang](https://github.com/tclxshunquan-wang)! - 1、adjust ts rules
+  2、fix typing error
+
 ## 1.0.4
 
 ### Patch Changes
