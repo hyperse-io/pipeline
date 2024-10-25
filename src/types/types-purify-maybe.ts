@@ -1,4 +1,5 @@
-import { Either, Left, Right } from './types-purify-either.js';
+import type { Either } from './types-purify-either.js';
+import { Left, Right } from './types-purify-either.js';
 
 export type MaybePatterns<T, U> =
   | { Just: (value: T) => U; Nothing: () => U }

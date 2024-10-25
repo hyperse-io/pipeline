@@ -1,4 +1,4 @@
-import { PipeWithFunction } from '../types/types-reactive.js';
+import type { PipeWithFunction } from '../types/types-reactive.js';
 
 const isPlaceholder = (a: any): boolean => {
   return (

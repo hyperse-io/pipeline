@@ -1,4 +1,4 @@
-import { PipeWithFunction } from '../types/types-reactive.js';
+import type { PipeWithFunction } from '../types/types-reactive.js';
 import { curryTwo } from './helper-curry.js';
 import { isArrayLike } from './helper-is-array-like.js';
 import { xwrap } from './helper-x-wrap.js';

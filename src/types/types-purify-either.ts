@@ -1,4 +1,5 @@
-import { Just, Maybe, Nothing } from './types-purify-maybe.js';
+import type { Maybe } from './types-purify-maybe.js';
+import { Just, Nothing } from './types-purify-maybe.js';
 
 export type EitherPatterns<L, R, T> =
   | { Left: (l: L) => T; Right: (r: R) => T }

@@ -1,16 +1,18 @@
 import { isPromise } from '../helpers/helper-is-promise.js';
 import { pipeWith } from '../helpers/helper-pipe-with.js';
 import { fold } from '../types/types-fp-ts.js';
-import {
+import type {
   Exists,
   ExitPipeReturnValue,
+  PipeCallback,
+} from '../types/types-reactive.js';
+import {
   isFpTsEither,
   isMonetCata,
   isPurifyEither,
   isPurifyEitherAsync,
   isPurifyMaybe,
   isPurifyMaybeAsync,
-  PipeCallback,
 } from '../types/types-reactive.js';
 import type {
   ExtractExitPipe1,
