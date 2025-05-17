@@ -84,9 +84,10 @@ const config: Config = {
       logo: {
         alt: 'Hyperse',
         src: '/img/logo.svg',
-        height: 40,
         style: {
+          height: 40,
           borderRadius: '2px',
+          width: 40,
         },
         href: 'https://github.com/hyperse-io',
       },
@@ -109,8 +110,7 @@ const config: Config = {
         name: 'docusaurus-tailwindcss',
         configurePostCss(postcssOptions) {
           // Appends TailwindCSS and AutoPrefixer.
-          postcssOptions.plugins.push(require.resolve('tailwindcss'));
-          postcssOptions.plugins.push(require.resolve('autoprefixer'));
+          postcssOptions.plugins.push(require.resolve('@tailwindcss/postcss'));
           return postcssOptions;
         },
       };

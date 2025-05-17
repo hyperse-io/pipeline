@@ -1,3 +1,9 @@
+@import 'tailwindcss';
+
+body {
+  font-family: var(--ifm-font-family-base);
+}
+
 .navbar__inner {
   margin-left: auto;
   margin-right: auto;
@@ -9,4 +15,8 @@
   margin-right: auto;
   max-width: 1419px;
   width: 100%;
+}
+
+.navbar__link {
+  @apply inline-flex items-center;
 }

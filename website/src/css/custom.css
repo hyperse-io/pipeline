@@ -1,18 +1,15 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
 
 /**
  * Any CSS included here will be global. The classic template
  * bundles Infima by default. Infima is a CSS framework designed to
  * work well for content-centric websites.
  */
- /* @font-face {
+ @font-face {
   font-family: 'Inter';
   src: url('/static/inter.woff') format('woff');
-} */
-
- @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+}
 
 :root {
   --ifm-font-family-base: 'Inter';

@@ -1,3 +1,5 @@
+@import 'tailwindcss';
+
 /* Styling of GraphQL code blocks */
 .graphql-code-block {
     background-color: var(--ifm-pre-background);
