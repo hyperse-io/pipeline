@@ -20,7 +20,6 @@
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",
       "source.organizeImports": "never",
-      "source.removeUnusedImports": "always",
     },
     "files.associations": {
       "*.css": "tailwindcss",
@@ -32,10 +31,7 @@
       "classNames"
     ],
     "tailwindCSS.experimental.configFile": {
-      "website/src/css/custom.css": "website/src/**",
-      "website/src/css/layout.css": "website/src/**",
-      "website/src/css/overrides.css": "website/src/**",
-      "website/src/css/code-blocks.css": "website/src/**",
+      "website/src/app/globals.css": "website/src/**",
     },
     // Disable vscode formatting for js,jsx,ts,tsx files
     // to allow dbaeumer.vscode-eslint to format them
