@@ -2,12 +2,12 @@
   "folders": [
     {
       "name": "pipeline",
-      "path": "./",
+      "path": ".",
     },
     {
       "name": "website",
       "path": "website",
-    },
+    }
   ],
   "extensions": {
     "recommendations": [
