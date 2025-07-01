@@ -195,11 +195,17 @@ const engine = new Pipeline<Context>((ctx, next) => {
 });
 
 engine.use((ctx, next) => {
-  fs.readFile(ctx.path, {}, (err, file) => {
-    if (err) next(err);
-    // ... Do something
-    await next();
+  await new Promise((resolve, reject) => {
+    fs.readFile(ctx.path, {}, (err, file) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      // ... Do something
+      resolve();
+    });
   });
+  await next();
 });
 
 // Error handling middleware
