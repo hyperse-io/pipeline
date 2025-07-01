@@ -165,14 +165,14 @@ interface Context {
 // Create a pipeline with initial middleware
 const engine = new Pipeline<Context>((ctx, next) => {
   ctx.foobar = 'baz';
-  next();
+  await next();
 });
 
 // Add more middleware
 engine.use(async (ctx, next) => {
   await new Promise((res) => setTimeout(() => res, 2000));
   ctx.another = 123;
-  next();
+  await next();
 });
 
 // Execute the pipeline
@@ -191,21 +191,21 @@ import { Pipeline } from '@hyperse/pipeline';
 
 const engine = new Pipeline<Context>((ctx, next) => {
   ctx.foobar = 'baz';
-  next();
+  await next();
 });
 
 engine.use((ctx, next) => {
   fs.readFile(ctx.path, {}, (err, file) => {
     if (err) next(err);
     // ... Do something
-    next();
+    await next();
   });
 });
 
 // Error handling middleware
 engine.use((ctx, next, error) => {
   if (error) console.error(error.message);
-  next();
+  await next();
 });
 ```
 

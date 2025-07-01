@@ -25,13 +25,13 @@ describe('Pipeline tests', () => {
     engine.use(async (ctx, next) => {
       ctx.another = 123;
       await new Promise((res) => setTimeout(res, 1000));
-      next();
+      await next();
     });
 
     engine.use(async (ctx, next) => {
       ctx.three = 123;
       await new Promise((res) => setTimeout(res, 1000));
-      next();
+      await next();
     });
 
     const context: TestContext = {};
@@ -44,7 +44,7 @@ describe('Pipeline tests', () => {
       ctx.foobar = 'baz';
       // Mock a real-world async function
       await new Promise((res) => setTimeout(res, 1000));
-      next();
+      await next();
     });
 
     engine.use(
@@ -56,7 +56,7 @@ describe('Pipeline tests', () => {
       },
       async (ctx, next, error) => {
         if (error) ctx.error = error.message;
-        next();
+        await next();
       }
     );
 
@@ -97,9 +97,9 @@ describe('Pipeline tests', () => {
       throw new Error(`This is an error`);
     });
 
-    engine.use((ctx, next, err) => {
+    engine.use(async (ctx, next, err) => {
       ctx.err = err;
-      next();
+      await next();
     });
 
     const context: TestContext = {};
@@ -111,21 +111,21 @@ describe('Pipeline tests', () => {
   it('Correct throw when middleware use throw Error direclty 2', async () => {
     const engine = new Pipeline<TestContext>(async (ctx, next) => {
       ctx.foobar = 'baz';
-      next();
+      await next();
     });
     engine.use(
-      async () => {
+      async (ctx, next) => {
         throw new Error('This is an error');
       },
-      async (ctx, next) => {
+      async (ctx, next, err) => {
         ctx.another = 123;
-        next();
+        await next();
       },
       async (ctx, next, error) => {
         if (error) {
           ctx.error = error.message;
         }
-        next();
+        await next();
       }
     );
     const context: TestContext = {};
@@ -133,5 +133,32 @@ describe('Pipeline tests', () => {
     expect(context.foobar).toBe('baz');
     expect(context.error).toBe('This is an error');
     expect(context.another).toBeUndefined();
+  });
+
+  it('Should fail silently when middleware does not await next()', async () => {
+    const engine = new Pipeline<TestContext>(async (ctx, next) => {
+      ctx.initial = 'start';
+      next();
+    });
+
+    engine.use(async (ctx, next) => {
+      await new Promise((resolve) => setTimeout(resolve, 100)); // Add sleep
+      ctx.first = 'first';
+      next();
+      ctx.afterNext = 'after';
+    });
+
+    engine.use(async (ctx, next) => {
+      await new Promise((resolve) => setTimeout(resolve, 100)); // Add sleep
+      ctx.second = 'second';
+      await next();
+    });
+
+    const context: TestContext = {};
+    await engine.execute(context);
+    expect(context.initial).toBe('start');
+    expect(context.first).toBeUndefined();
+    expect(context.second).toBeUndefined();
+    expect(context.afterNext).toBeUndefined();
   });
 });
