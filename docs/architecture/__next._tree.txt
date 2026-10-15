@@ -2,4 +2,4 @@
 3:[["children",{"s":"__PAGE__","h":160}]]
 2:[["children",{"s":{"n":"slug","t":"oc","k":"architecture","s":[]},"h":64,"c":"$Q3"}]]
 1:[["children",{"s":"docs","h":32,"c":"$Q2"}]]
-0:{"b":"N2dA3Wmno2SMETgx2niSV","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"_lNXWhD-qyHVL8QGGEuf_","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
