@@ -174,7 +174,7 @@ describe('Either', () => {
     expect(Left('Error').altLazy(fn)).toEqual(Left('Error!'));
     expect(Right(5).altLazy(fn2)).toEqual(Right(5));
 
-    expect(fn).toBeCalledTimes(1);
+    expect(fn).toHaveBeenCalledTimes(1);
     expect(fn2).not.toHaveBeenCalled();
   });
 
@@ -197,9 +197,7 @@ describe('Either', () => {
   test('unsafeCoerce', () => {
     expect(Right(5).unsafeCoerce()).toEqual(5);
     expect(() => Left('Error').unsafeCoerce()).toThrow();
-    expect(() => Left(new Error('a')).unsafeCoerce()).toThrowError(
-      new Error('a')
-    );
+    expect(() => Left(new Error('a')).unsafeCoerce()).toThrow(new Error('a'));
   });
 
   test('caseOf', () => {

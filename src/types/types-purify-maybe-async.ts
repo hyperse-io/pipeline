@@ -225,9 +225,7 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
       | undefined
       | null,
     onrejected?:
-      | ((reason: any) => TResult2 | PromiseLike<TResult2>)
-      | undefined
-      | null
+      ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
   ): PromiseLike<TResult1 | TResult2> {
     return this.run().then(onfulfilled, onrejected);
   }

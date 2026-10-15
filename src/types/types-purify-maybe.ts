@@ -2,8 +2,7 @@ import type { Either } from './types-purify-either.js';
 import { Left, Right } from './types-purify-either.js';
 
 export type MaybePatterns<T, U> =
-  | { Just: (value: T) => U; Nothing: () => U }
-  | { _: () => U };
+  { Just: (value: T) => U; Nothing: () => U } | { _: () => U };
 
 interface AlwaysJust {
   kind: '$$MaybeAlwaysJust';
@@ -291,7 +290,7 @@ class Just<T> implements Maybe<T> {
   }
 
   ifJust(effect: (value: T) => any): this {
-    return effect(this.__value), this;
+    return (effect(this.__value), this);
   }
 
   ifNothing(_: () => any): this {
@@ -424,7 +423,7 @@ class Nothing implements Maybe<never> {
   }
 
   ifNothing(effect: () => any): this {
-    return effect(), this;
+    return (effect(), this);
   }
 
   filter(_: (value: never) => boolean): Maybe<never> {

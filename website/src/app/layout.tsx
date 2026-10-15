@@ -7,7 +7,7 @@ import '@/styles/globals.css';
 export const metadata: Metadata = {
   description:
     'Hyperse Pipeline is a powerful TypeScript middleware engine and reactive pipeline library for handling data flow.',
-  metadataBase: new URL('https://www.hyperse.net/'),
+  metadataBase: new URL('https://hyperse-io.github.io/pipeline/'),
   keywords: [
     'Hyperse',
     'Pipeline',
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     'msapplication-TileColor': '#fff',
   },
   twitter: {
-    site: 'https://www.hyperse.net/',
+    site: 'https://hyperse-io.github.io/pipeline/',
   },
   alternates: {
     canonical: './',

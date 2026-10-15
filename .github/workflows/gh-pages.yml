@@ -7,7 +7,20 @@ on:
     paths:
       - '.github/workflows/gh-pages.yml'
       - 'website/**'
+      # The docs render API tables from the package source, so changes to the
+      # library and its type config must redeploy the site too.
+      - 'src/**'
+      - 'package.json'
+      - 'tsconfig.json'
+      - 'tsconfig.build.json'
   pull_request:
+    paths:
+      - '.github/workflows/gh-pages.yml'
+      - 'website/**'
+      - 'src/**'
+      - 'package.json'
+      - 'tsconfig.json'
+      - 'tsconfig.build.json'
 
 jobs:
   deploy:
@@ -31,9 +44,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: 📥 Install Dependencies
+        working-directory: ${{ github.workspace }}
         run: yarn --frozen-lockfile
 
       - name: Unit tests
+        working-directory: ${{ github.workspace }}
         run: |
           yarn test
 
@@ -44,6 +59,7 @@ jobs:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         if: github.ref == 'refs/heads/main'
+        working-directory: ${{ github.workspace }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./website/out

@@ -144,7 +144,7 @@ describe('Maybe', () => {
     expect(Nothing.altLazy(fn)).toEqual(Just(5));
     expect(Just(5).altLazy(fn2)).toEqual(Just(5));
 
-    expect(fn).toBeCalledTimes(1);
+    expect(fn).toHaveBeenCalledTimes(1);
     expect(fn2).not.toHaveBeenCalled();
   });
 

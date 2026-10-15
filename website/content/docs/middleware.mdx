@@ -20,7 +20,7 @@ class Pipeline<T> {
 }
 ```
 
-<AutoTypeTable path="../dist/index.d.ts" name="Pipeline" />
+<AutoTypeTable path="../src/index.ts" name="Pipeline" />
 
 `T` is the context type shared between middleware functions.
 
@@ -47,7 +47,7 @@ type Next<T> = (error?: Error) => Promise<Middleware<T>> | Promise<void>;
 
 A structural interface for anything that can act as a middleware pipe.
 
-<AutoTypeTable path="../dist/index.d.ts" name="MiddlewarePipe" />
+<AutoTypeTable path="../src/index.ts" name="MiddlewarePipe" />
 
 ## Basic usage
 

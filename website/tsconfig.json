@@ -20,7 +20,7 @@
     "types": ["vitest/globals"],
     "paths": {
       "@/*": ["./src/*"],
-      "@hyperse/pipeline": ["../dist/index.d.ts"]
+      "@hyperse/pipeline": ["../src/index.ts"]
     },
     "plugins": [
       {

@@ -14,9 +14,10 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "next build && yarn postbuild",
+    "build": "yarn build:pipeline && next build && yarn postbuild",
+    "build:pipeline": "yarn workspace @hyperse/pipeline build",
     "postbuild": "next-sitemap",
-    "build:ghpage": "cross-env NEXT_BUILD_ENV_OUTPUT='export' next build && yarn postbuild:ghpage",
+    "build:ghpage": "yarn build:pipeline && cross-env NEXT_BUILD_ENV_OUTPUT='export' next build && yarn postbuild:ghpage",
     "postbuild:ghpage": "next-sitemap",
     "dev": "next dev -p 3000 -H 0.0.0.0 --turbopack",
     "fix-all-files": "eslint . --fix",

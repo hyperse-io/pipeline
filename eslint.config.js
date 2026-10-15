@@ -16,6 +16,14 @@ export default defineConfig(
         '@typescript-eslint/no-unsafe-function-type': 'off',
       },
     },
+    {
+      files: ['**/*.{test,spec}.?(c|m)[jt]s?(x)'],
+      rules: {
+        // `expect` assertions inside try/catch + `if` guards are the clearest
+        // way to test thrown errors and type-narrowed exit-pipe values.
+        'vitest/no-conditional-expect': 'off',
+      },
+    },
   ],
   ['**/out', '**/website']
 );

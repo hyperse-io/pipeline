@@ -2,8 +2,7 @@ import type { Maybe } from './types-purify-maybe.js';
 import { Just, Nothing } from './types-purify-maybe.js';
 
 export type EitherPatterns<L, R, T> =
-  | { Left: (l: L) => T; Right: (r: R) => T }
-  | { _: () => T };
+  { Left: (l: L) => T; Right: (r: R) => T } | { _: () => T };
 
 export interface Either<L, R> {
   /** Returns true if `this` is `Left`, otherwise it returns false */
@@ -258,7 +257,7 @@ class Right<R, L = never> implements Either<L, R> {
   }
 
   ifRight(effect: (value: R) => any): this {
-    return effect(this.__value), this;
+    return (effect(this.__value), this);
   }
 
   toMaybe(): Maybe<R> {
@@ -395,7 +394,7 @@ class Left<L, R = never> implements Either<L, R> {
   }
 
   ifLeft(effect: (value: L) => any): this {
-    return effect(this.__value), this;
+    return (effect(this.__value), this);
   }
 
   ifRight(_: (value: R) => any): this {
