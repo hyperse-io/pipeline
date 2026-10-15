@@ -1,5 +1,11 @@
 # @hyperse/pipeline
 
+## 1.0.7
+
+### Patch Changes
+
+- [`a9fb74b`](https://github.com/hyperse-io/pipeline/commit/a9fb74b22583d6c53a355c729d268831db2cba3e) Thanks [@tianyingchun](https://github.com/tianyingchun)! - Export the `Next<T>` middleware type from the package entry, fix `tsc` build output & declarations, and rewrite the documentation site.
+
 ## 1.0.6
 
 ### Patch Changes
