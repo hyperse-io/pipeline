@@ -1,5 +1,11 @@
 # @hyperse/pipeline
 
+## 1.0.8
+
+### Patch Changes
+
+- [`4d81384`](https://github.com/hyperse-io/pipeline/commit/4d8138457af000c96314c2870c8cac7b524656d5) Thanks [@tianyingchun](https://github.com/tianyingchun)! - change postinstall script to prepare for husky
+
 ## 1.0.7
 
 ### Patch Changes
