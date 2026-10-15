@@ -1,0 +1,136 @@
+---
+title: Examples
+description: End-to-end recipes for the middleware engine and the reactive pipeline.
+icon: Code
+---
+
+## Nested pipelines
+
+A pipe can be used as a step inside another pipe. Early exits inside the inner
+pipe propagate to the outer result.
+
+```typescript
+import { pipe, exitPipe, isExitPipeValue } from '@hyperse/pipeline';
+
+const result = await pipe(
+  () => 123,
+  pipe(
+    (n: number) => n + 1,
+    (n) => exitPipe(n + 1),
+    () => true // never runs
+  ),
+  () => 'qwe' // never runs
+)();
+
+if (isExitPipeValue(result)) {
+  console.log(result.r); // 125
+}
+```
+
+## Context with nested pipelines
+
+`context()` reaches into nested pipes and applies the injected context to every
+`pipeContext` step, at any depth.
+
+```typescript
+import { pipe, pipeContext } from '@hyperse/pipeline';
+
+const result = await pipe(
+  () => 123,
+  pipe(
+    (n: number) => n + 1,
+    pipeContext((ctx: { n: number }) => (n) => n + ctx.n)
+  ),
+  (n) => n + 1
+).context({ n: 1 })();
+// result => 127
+```
+
+## Complex promise pipeline
+
+Steps can resolve to an `exitPipe` wrapper asynchronously:
+
+```typescript
+import { pipe, exitPipe, isExitPipeValue } from '@hyperse/pipeline';
+
+const result = await pipe(
+  () => 123,
+  (n) => Promise.resolve(exitPipe(n + 1)),
+  () => 'qwe'
+)();
+
+if (isExitPipeValue(result)) {
+  console.log(result.r); // 124
+}
+```
+
+## Error handling
+
+A throwing step rejects the returned promise, so ordinary `try`/`catch` works:
+
+```typescript
+import { pipe } from '@hyperse/pipeline';
+
+try {
+  await pipe(
+    async () => {
+      throw new Error('Pipeline error');
+    },
+    (n) => n + 1
+  )();
+} catch (error) {
+  console.error((error as Error).message); // "Pipeline error"
+}
+```
+
+## Request pipeline with middleware
+
+Combine both paradigms: middleware for cross-cutting concerns, pipes for the
+actual transformation.
+
+```typescript
+import { Pipeline, pipe } from '@hyperse/pipeline';
+
+type Context = { raw: string; parsed?: unknown; error?: Error };
+
+const normalise = pipe(
+  (ctx: Context) => ctx.raw,
+  (raw: string) => raw.trim(),
+  (raw: string) => raw.toLowerCase()
+);
+
+const engine = new Pipeline<Context>(async (ctx, next) => {
+  ctx.parsed = await normalise(ctx);
+  await next();
+});
+
+engine.use(async (ctx, next) => {
+  if (!ctx.parsed) {
+    return next(new Error('Empty payload'));
+  }
+  await next();
+});
+
+engine.use((ctx, next, error) => {
+  if (error) ctx.error = error;
+});
+```
+
+## Next steps
+
+<Cards>
+  <Card
+    title="Middleware Engine"
+    href="/docs/middleware"
+    icon={<Icon name="Layers" />}
+  >
+    Revisit the middleware API.
+  </Card>
+  <Card
+    title="Monad Integration"
+    href="/docs/monads"
+    icon={<Icon name="Sparkles" />}
+  >
+    Compose Either and Maybe values.
+  </Card>
+</Cards>

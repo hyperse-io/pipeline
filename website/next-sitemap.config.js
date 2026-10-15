@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 export default {
-  siteUrl: 'https://nextra.site',
+  siteUrl: 'https://www.hyperse.net/pipeline',
   changefreq: 'weekly',
   priority: '0.5',
   generateIndexSitemap: false,

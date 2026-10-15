@@ -9,11 +9,13 @@ on:
       - dev
     # Only consider those paths to trigger the action
     paths:
-      - 'packages/**'
+      - 'src/**'
+      - 'tests/**'
       - 'package.json'
       - '*.lock'
       - '.yarnrc.yml'
-      - 'tsconfig.base.json'
+      - 'tsconfig.json'
+      - 'tsconfig.build.json'
       - '.prettier*'
       - '.github/**'
 
@@ -29,19 +31,22 @@ on:
       - reopened
     # Only consider those paths to trigger the action
     paths:
-      - 'packages/**'
+      - 'src/**'
+      - 'tests/**'
       - 'package.json'
       - '*.lock'
       - '.yarnrc.yml'
-      - 'tsconfig.base.json'
+      - 'tsconfig.json'
+      - 'tsconfig.build.json'
       - '.prettier*'
       - '.github/**'
 jobs:
   test:
+    if: ${{ !startsWith(github.head_ref, 'changeset-release/') }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [24.x]
     steps:
       - uses: actions/checkout@v4
 

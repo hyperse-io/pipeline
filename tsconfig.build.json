@@ -2,9 +2,20 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "rootDir": "./src",
+    "outDir": "./dist",
+    "noEmit": false,
     "incremental": false,
     "moduleResolution": "nodenext",
-    "paths": {}
+    "paths": {},
+    "types": ["@types/node"]
   },
-  "exclude": ["**/*.stories.tsx", "**/*.stories.mdx", ".storybook/**", "dist"]
+  "include": ["./src/index.ts"],
+  "exclude": [
+    "**/*.stories.tsx",
+    "**/*.stories.mdx",
+    ".storybook/**",
+    "dist",
+    "node_modules",
+    "**/website/**"
+  ]
 }

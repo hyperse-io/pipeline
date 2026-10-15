@@ -1,0 +1,57 @@
+---
+title: Development
+description: Set up, test and build the library locally.
+icon: Terminal
+---
+
+## Clone and install
+
+```bash
+git clone https://github.com/hyperse-io/pipeline.git
+cd pipeline
+yarn install
+```
+
+## Common tasks
+
+<Tabs items={['Build', 'Test', 'Lint', 'Typecheck']}>
+  <Tab value="Build">```bash yarn build ```</Tab>
+  <Tab value="Test">```bash yarn test ```</Tab>
+  <Tab value="Lint">```bash yarn lint ```</Tab>
+  <Tab value="Typecheck">```bash yarn typecheck ```</Tab>
+</Tabs>
+
+## Repository layout
+
+```text
+pipeline/
+├── src/
+│   ├── helpers/      # functional utilities (curry, reduce, xwrap, …)
+│   ├── middleware/   # Pipeline class + invocation
+│   ├── reactive/     # pipe, exitPipe, pipeContext
+│   └── types/        # type-level composition and monad detection
+├── tests/
+└── website/          # this documentation site
+```
+
+## Submitting changes
+
+1. Create a branch from `main`.
+2. Make your change and run `yarn test` plus `yarn typecheck`.
+3. Add a changeset describing the release impact:
+
+```bash
+yarn changeset
+```
+
+4. Open a pull request.
+
+<Callout type="info" title="Conventional commits">
+  Commit messages are validated with commitlint. Use the interactive prompt via
+  `yarn cz` if you prefer a guided flow.
+</Callout>
+
+## License
+
+MIT — see the [LICENSE](https://github.com/hyperse-io/pipeline/blob/main/LICENSE)
+file for details.

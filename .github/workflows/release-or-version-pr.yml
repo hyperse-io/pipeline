@@ -8,9 +8,10 @@ on:
 jobs:
   release:
     # Basic security: the release job can only be executed from this repo and from the main branch (not a remote thing)
-    if: ${{ github.repository == 'hyperse-io/pipeline' && contains('refs/heads/main',github.ref)}}
+    if: ${{ github.repository == 'hyperse-io/pipeline' && contains('refs/heads/main',github.ref) && !startsWith(github.head_ref, 'changeset-release/') }}
     name: Release and changelog
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -19,22 +20,23 @@ jobs:
           # @link https://github.com/actions/checkout#fetch-all-history-for-all-tags-and-branches
           fetch-depth: 0
 
-      - name: Use Node.js 18.x
+      - name: Use Node.js 24.x
         uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: 24.x
 
       - name: 📥 Install Dependencies
         run: yarn --frozen-lockfile
 
-      # @link https://github.com/changesets/action
+      # @link https://github.com/changesets/action (v2 for @changesets/cli v3)
       - name: Create Release Pull Request or Publish to npm
         id: changesets
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
-          publish: yarn release
-          cwd: ${{ github.workspace }}
-          title: '[Release] Version packages'
+          publish-script: yarn release
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-title: '[Release] Version packages'
+          commit-message: 'Version Packages [skip ci]'
           # Optional, might be used in conjunction with GITHUB_TOKEN to
           # allow running the workflows on a Version package action.
           # Be aware of security implications.
@@ -43,6 +45,5 @@ jobs:
           # See https://github.com/changesets/action/issues/147
           HOME: ${{ github.workspace }}
           # Allows to download / query / comment packages
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Allows to publish packages
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

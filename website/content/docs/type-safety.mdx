@@ -1,0 +1,78 @@
+---
+title: Type Safety
+description: How the pipeline preserves and infers types across compositions.
+icon: ShieldCheck
+---
+
+The library is written in TypeScript and designed so that composition never
+degrades the types you started with.
+
+## Guarantees
+
+- **Generic inference** for context and return types
+- **Signature preservation** across pipeline compositions
+- **Monad detection** so composition stays typed
+- **Parameter count validation** — 0 to 3 parameters per function
+- **Return type inference**, including `exitPipe` detection
+
+## Inference in practice
+
+```typescript
+import { pipe } from '@hyperse/pipeline';
+
+const run = pipe(
+  (n: number) => n + 1,
+  (n) => n.toString(),
+  (s) => `${s}!`
+);
+
+const out = await run(41);
+// `out` is inferred as string: "42!"
+```
+
+## Context typing
+
+`pipeContext` carries the context parameter through to `.context()`:
+
+```typescript
+import { pipe, pipeContext } from '@hyperse/pipeline';
+
+const run = pipe(
+  () => 1,
+  pipeContext((ctx: { factor: number }) => (n: number) => n * ctx.factor)
+);
+
+run.context({ factor: 10 });
+const out = await run();
+// `out` is inferred as number
+```
+
+## Exit narrowing
+
+`isExitPipeValue` is a type guard, so a union return type narrows correctly when
+you branch on it.
+
+<Callout type="info" title="Illustrative snippets">
+  Some examples on this site omit surrounding scaffolding to stay focused.
+  TypeScript diagnostics are suppressed for those blocks so the snippets render
+  cleanly.
+</Callout>
+
+## Next steps
+
+<Cards>
+  <Card
+    title="Performance"
+    href="/docs/performance"
+    icon={<Icon name="Gauge" />}
+  >
+    Trade-offs in the runtime implementation.
+  </Card>
+  <Card
+    title="Browser Support"
+    href="/docs/support"
+    icon={<Icon name="Globe" />}
+  >
+    Runtimes and environments you can target.
+  </Card>
+</Cards>

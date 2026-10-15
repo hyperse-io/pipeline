@@ -1,0 +1,201 @@
+---
+title: Reactive Pipeline
+description: Compose plain functions into a lazy, typed, promise-aware pipeline.
+icon: Workflow
+---
+
+`pipe` composes plain functions into a single callable function. Composition is
+lazy — nothing runs until you invoke the returned function — and the result is
+typed end-to-end.
+
+## `pipe(...functions)`
+
+Creates a function that pipes input through a series of functions.
+
+```typescript
+function pipe<T1, T2, ..., T10>(
+  fn0: () => PipeFuncReturn<T1, L1, R1>,
+  fn1: (x: T1, l: L1) => PipeFuncReturn<T2, L2, R2>,
+  // ... up to 10 functions
+): PipeReturn
+```
+
+Key properties:
+
+- Up to **10** function compositions
+- **0–3** parameters per function
+- Returns a callable function carrying extra methods (see below)
+- Always returns a promise when awaited
+
+## The returned function
+
+The object returned by `pipe` is callable _and_ carries three control methods:
+
+| Method        | Signature                                                   | Purpose                                 |
+| ------------- | ----------------------------------------------------------- | --------------------------------------- |
+| `replace`     | `(replacements: Array<[number, Function]>) => PipeFunction` | Swap individual steps by index          |
+| `replaceUndo` | `() => PipeFunction`                                        | Restore the original steps              |
+| `context`     | `(ctx: unknown) => PipeFunction`                            | Inject context into `pipeContext` steps |
+
+```typescript
+interface PipeFunction {
+  (...args: unknown[]): Promise<unknown>;
+  replace(replacements: Array<[number, Function]>): PipeFunction;
+  replaceUndo(): PipeFunction;
+  context(ctx: unknown): PipeFunction;
+}
+```
+
+## `exitPipe<T>(value: T)`
+
+Exits the pipeline early and returns a wrapped value instead of running the
+remaining steps.
+
+```typescript
+function exitPipe<T>(r: T): ExitPipeReturnValue<T>;
+```
+
+The wrapper is `{ r: T }`:
+
+<AutoTypeTable path="../dist/index.d.ts" name="ExitPipeReturnValue" />
+
+## `isExitPipeValue<T>(value: unknown)`
+
+Type guard for the wrapped value returned by `exitPipe`.
+
+```typescript
+function isExitPipeValue<T>(value: unknown): value is ExitPipeReturnValue<T>;
+```
+
+## `pipeContext<T, L, R, C>(fn)`
+
+Marks a function as context-aware. The outer function receives the injected
+context and returns the step to run.
+
+```typescript
+function pipeContext<T, L, R, C>(
+  fn: (ctx: C) => (r: T, l: L) => R
+): (r: T, l: L) => R;
+```
+
+## Basic pipeline
+
+```typescript
+import { pipe } from '@hyperse/pipeline';
+
+const result = await pipe(
+  () => 123,
+  (n) => n + 1
+)();
+// result => 124
+```
+
+## Pipeline with arguments
+
+The first function's parameters become the arguments of the resulting function:
+
+```typescript
+const result = await pipe(
+  (n: number) => n + 1,
+  (n) => n * 2
+)(123);
+// result => 248
+```
+
+## Early exit
+
+<Steps>
+  <Step>
+
+### Exit from any step
+
+Return `exitPipe(value)` and the remaining steps are skipped:
+
+```typescript
+import { pipe, exitPipe, isExitPipeValue } from '@hyperse/pipeline';
+
+const result = await pipe(
+  () => 123,
+  (n) => exitPipe(n + 1),
+  () => 'qwe' // never runs
+)();
+```
+
+  </Step>
+  <Step>
+
+### Narrow the result
+
+Use the type guard to read `.r`:
+
+```typescript
+if (isExitPipeValue(result)) {
+  console.log(result.r); // 124
+}
+```
+
+  </Step>
+</Steps>
+
+## Context injection
+
+```typescript
+import { pipe, pipeContext } from '@hyperse/pipeline';
+
+const result = await pipe(
+  () => 123,
+  pipeContext((ctx: { n: number }) => (n) => n + ctx.n),
+  (n) => n + 1
+).context({ n: 1 })();
+// result => 125
+```
+
+## Dynamic modification
+
+```typescript
+const fn = pipe(
+  () => 123,
+  (n) => n + 1
+);
+
+// Replace the step at index 0
+fn.replace([[0, () => 124]]);
+const result1 = await fn(); // 125
+
+// Restore the original step
+fn.replaceUndo();
+const result2 = await fn(); // 124
+```
+
+## Promise support
+
+Steps may return promises; `pipe` awaits each one before continuing.
+
+```typescript
+const result = await pipe(
+  () => Promise.resolve(123),
+  (n) => n + 1
+)();
+// result => 124
+```
+
+## Type safety
+
+The pipeline preserves function signatures across compositions, infers return
+types, and detects monads to compose them automatically. Parameter counts are
+validated at compile time (0–3 per function).
+
+## Next steps
+
+<Cards>
+  <Card title="Examples" href="/docs/examples" icon={<Icon name="Code" />}>
+    Nested pipelines, monads and error handling.
+  </Card>
+  <Card
+    title="Performance"
+    href="/docs/performance"
+    icon={<Icon name="Gauge" />}
+  >
+    What the runtime costs and why.
+  </Card>
+</Cards>

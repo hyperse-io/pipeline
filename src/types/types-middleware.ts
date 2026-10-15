@@ -1,7 +1,7 @@
 /**
  * 'next' function, passed to a middleware
  */
-type Next<T> = (error?: Error) => Promise<Middleware<T>> | Promise<void>;
+export type Next<T> = (error?: Error) => Promise<Middleware<T>> | Promise<void>;
 
 /**
  * A middleware

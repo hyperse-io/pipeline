@@ -1,0 +1,97 @@
+---
+title: Installation
+description: Install @hyperse/pipeline in your project.
+icon: Download
+---
+
+## Package install
+
+```package-install
+@hyperse/pipeline
+```
+
+## Requirements
+
+- **Node.js** 16 or newer
+- **TypeScript** 4.5 or newer (for full type inference)
+
+The package ships both ESM and type declarations:
+
+```json title="package.json"
+{
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "types": "./dist/index.d.ts"
+    }
+  }
+}
+```
+
+## Verify the install
+
+Import either paradigm and check that types resolve:
+
+```typescript
+import { Pipeline, pipe } from '@hyperse/pipeline';
+
+const engine = new Pipeline<{ ok: boolean }>();
+const run = pipe(
+  () => 1,
+  (n) => n + 1
+);
+
+console.log(typeof engine.use, typeof run);
+```
+
+## Optional integrations
+
+The monad helpers are dependency-free, but to _use_ monads you need the
+corresponding library installed:
+
+```package-install
+monet
+```
+
+Or, for `fp-ts` / `purify-ts`:
+
+```package-install
+fp-ts
+```
+
+<Tabs items={['monet', 'fp-ts', 'purify-ts']}>
+  <Tab value="monet">
+    ```typescript
+    import { Either, Maybe } from 'monet';
+    ```
+  </Tab>
+  <Tab value="fp-ts">
+    ```typescript
+    import * as E from 'fp-ts/Either';
+    ```
+  </Tab>
+  <Tab value="purify-ts">
+    ```typescript
+    import { Either, Maybe } from 'purify-ts';
+    ```
+  </Tab>
+</Tabs>
+
+## Next steps
+
+<Cards>
+  <Card
+    title="Middleware engine"
+    href="/docs/middleware"
+    icon={<Icon name="Layers" />}
+  >
+    Build ordered, context-aware middleware chains.
+  </Card>
+  <Card
+    title="Reactive pipeline"
+    href="/docs/reactive"
+    icon={<Icon name="Workflow" />}
+  >
+    Compose typed data transformations.
+  </Card>
+</Cards>

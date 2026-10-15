@@ -15,12 +15,12 @@
     "resolveJsonModule": true,
     "noUncheckedIndexedAccess": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
-    "baseUrl": "./",
     "types": ["vitest/globals"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@hyperse/pipeline": ["../dist/index.d.ts"]
     },
     "plugins": [
       {
@@ -30,14 +30,13 @@
   },
   "include": [
     "next-env.d.ts",
-    "next-intl.d.ts",
-    "next-pages.d.ts",
     "**/*.ts",
     "**/*.cjs",
     "**/*.mjs",
     "**/*.tsx",
     "**/*.mdx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": ["node_modules", ".next"]
 }

@@ -1,0 +1,147 @@
+---
+title: Middleware Engine
+description: Ordered, context-aware middleware chains with automatic error propagation.
+icon: Layers
+---
+
+The middleware engine is a Koa-style pipeline. Middleware functions run in the
+order they were added, share a single context object, and can short-circuit or
+handle errors downstream.
+
+## `Pipeline<T>`
+
+A middleware container and invoker.
+
+```typescript
+class Pipeline<T> {
+  constructor(...middlewares: Middleware<T>[]);
+  use(...mw: Middleware<T>[]): Pipeline<T>;
+  execute(context: T): Promise<void>;
+}
+```
+
+<AutoTypeTable path="../dist/index.d.ts" name="Pipeline" />
+
+`T` is the context type shared between middleware functions.
+
+## `Middleware<T>`
+
+The signature every middleware function must satisfy.
+
+```typescript
+type Middleware<T> = (
+  context: T,
+  next: Next<T>,
+  error?: Error
+) => Promise<void> | void;
+```
+
+`next` accepts an optional `Error`, so a middleware can hand a failure to the
+next error-handling middleware instead of throwing:
+
+```typescript
+type Next<T> = (error?: Error) => Promise<Middleware<T>> | Promise<void>;
+```
+
+## `MiddlewarePipe<T>`
+
+A structural interface for anything that can act as a middleware pipe.
+
+<AutoTypeTable path="../dist/index.d.ts" name="MiddlewarePipe" />
+
+## Basic usage
+
+```typescript
+import { Pipeline } from '@hyperse/pipeline';
+
+interface Context {
+  [key: string]: any;
+}
+
+// Create a pipeline with initial middleware
+const engine = new Pipeline<Context>((ctx, next) => {
+  ctx.foobar = 'baz';
+  await next();
+});
+
+// Add more middleware
+engine.use(async (ctx, next) => {
+  await new Promise((res) => setTimeout(res, 2000));
+  ctx.another = 123;
+  await next();
+});
+
+// Execute the pipeline
+const context: Context = {};
+await engine.execute(context);
+console.log(context);
+// => { foobar: "baz", another: 123 }
+```
+
+## Error handling
+
+Because `next` accepts an error, error-handling middleware is simply middleware
+that checks its third argument. Register the handler **after** the middleware it
+should protect, and error propagation flows in declaration order.
+
+```typescript
+import { Pipeline } from '@hyperse/pipeline';
+
+const engine = new Pipeline<Context>(async (ctx, next) => {
+  try {
+    await next();
+  } catch (err) {
+    // Convert a thrown error into a "passed" error, which skips ahead to the
+    // next middleware that declares an `error` parameter.
+    await next(err as Error);
+  }
+});
+
+engine.use(async (ctx, next) => {
+  // Any throw here propagates to the error handler above.
+  await readFile(ctx.path);
+  await next();
+});
+
+engine.use(async (ctx, next, error) => {
+  if (error) {
+    ctx.failed = true;
+    return;
+  }
+  await next();
+});
+```
+
+<Callout type="warn" title="Error parameter position">
+  The error argument is always the **third** parameter. A middleware that
+  declares it opts into error handling for everything the previous middleware
+  forwards.
+</Callout>
+
+## Chaining
+
+`use()` is chainable and returns the same instance, so you can register batches
+of middleware fluently:
+
+```typescript
+const engine = new Pipeline<Context>()
+  .use(loggingMiddleware)
+  .use(authMiddleware)
+  .use(routerMiddleware)
+  .use(errorMiddleware);
+```
+
+## Next steps
+
+<Cards>
+  <Card
+    title="Reactive pipeline"
+    href="/docs/reactive"
+    icon={<Icon name="Workflow" />}
+  >
+    Compose typed data transformations with `pipe`.
+  </Card>
+  <Card title="Examples" href="/docs/examples" icon={<Icon name="Code" />}>
+    Full recipes for middleware and pipes.
+  </Card>
+</Cards>

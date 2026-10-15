@@ -1,0 +1,102 @@
+---
+title: Monad Integration
+description: Compose Either, Maybe and Validation values directly inside a pipe.
+icon: Sparkles
+---
+
+The reactive pipeline detects monadic return values and composes them
+automatically — you do not need to unwrap a step's result before the next step
+receives it.
+
+Supported libraries:
+
+| Library                                           | Types                                          |
+| ------------------------------------------------- | ---------------------------------------------- |
+| [`monet`](https://monet.github.io/monet.js/)      | `Either`, `Maybe`, `Validation`                |
+| `fp-ts`                                           | `Either`                                       |
+| [`purify-ts`](https://gigobyte.github.io/purify/) | `Either`, `EitherAsync`, `Maybe`, `MaybeAsync` |
+
+## Two-argument steps
+
+When a step produces a monad, the next step receives **two** arguments: the
+right/bound value, and the left value. In the examples below `n` is the bound
+value and `l` holds the left side.
+
+## Either
+
+```typescript
+import { pipe } from '@hyperse/pipeline';
+import { Either } from 'monet';
+
+const result = await pipe(
+  () => Either.left(123),
+  (n, l) => l + 1 // `l` contains the left value
+)();
+// result => 124
+```
+
+## Maybe
+
+```typescript
+import { pipe } from '@hyperse/pipeline';
+import { Maybe } from 'monet';
+
+const result = await pipe(
+  () => Maybe.Some(123),
+  (n) => n + 1
+)();
+// result => 124
+```
+
+## Purify-ts
+
+```typescript
+import { pipe } from '@hyperse/pipeline';
+import { Either } from 'purify-ts';
+
+const result = await pipe(
+  () => Either.Left(123),
+  (n, l) => l + 1
+)();
+// result => 124
+```
+
+<Callout type="info" title="Async monads are supported too">
+  `EitherAsync` and `MaybeAsync` from `purify-ts` are recognised alongside their
+  synchronous counterparts — no extra configuration required.
+</Callout>
+
+## Combining with early exit
+
+Monads and `exitPipe` compose. A monadic step can still short-circuit the whole
+pipeline:
+
+```typescript
+import { pipe, exitPipe, isExitPipeValue } from '@hyperse/pipeline';
+import { Either } from 'monet';
+
+const result = await pipe(
+  () => Either.right(123),
+  (n) => (n > 100 ? exitPipe(n) : n + 1),
+  () => 'unreachable'
+)();
+
+if (isExitPipeValue(result)) {
+  console.log(result.r); // 123
+}
+```
+
+## Next steps
+
+<Cards>
+  <Card title="Examples" href="/docs/examples" icon={<Icon name="Code" />}>
+    Nested pipelines and end-to-end recipes.
+  </Card>
+  <Card
+    title="Type Safety"
+    href="/docs/type-safety"
+    icon={<Icon name="ShieldCheck" />}
+  >
+    How monad detection stays type-safe.
+  </Card>
+</Cards>

@@ -1,0 +1,17 @@
+{
+  "title": "Pipeline",
+  "pages": [
+    "index",
+    "installation",
+    "middleware",
+    "reactive",
+    "monads",
+    "examples",
+    "---Advanced---",
+    "type-safety",
+    "performance",
+    "architecture",
+    "support",
+    "development"
+  ]
+}

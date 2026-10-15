@@ -50,7 +50,10 @@
       "./",
       "./website",
     ],
-    "typescript.tsdk": "root/node_modules/typescript/lib",
+    "js/ts.tsdk.path": "root/node_modules/typescript/lib",
+    "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+    "js/ts.tsserver.maxMemory": 8192,
+    "json.schemaDownload.enable": true,
     "[jsonc]": {
       "editor.formatOnSave": false
     },

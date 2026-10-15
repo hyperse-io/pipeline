@@ -1,0 +1,133 @@
+---
+title: Introduction
+description: A powerful TypeScript middleware engine and reactive pipeline library.
+---
+
+`@hyperse/pipeline` is a powerful TypeScript middleware engine and reactive
+pipeline library. It provides **two complementary paradigms** for handling data
+flow, and you can pick whichever fits the problem — or combine them.
+
+## Two paradigms
+
+<Cards>
+  <Card
+    title="Middleware Engine"
+    href="/docs/middleware"
+    icon={<Icon name="Zap" />}
+  >
+    Type-safe, Koa-style middleware composition with shared context and error
+    propagation.
+  </Card>
+  <Card
+    title="Reactive Pipeline"
+    href="/docs/reactive"
+    icon={<Icon name="Workflow" />}
+  >
+    Functional `pipe` composition with early exit, context injection and monad
+    support.
+  </Card>
+</Cards>
+
+## Middleware Engine
+
+The `Pipeline` class composes middleware functions that share a context object
+and run in sequence. Each middleware receives `(context, next, error)` and
+decides whether to continue the chain.
+
+```typescript
+import { Pipeline } from '@hyperse/pipeline';
+
+type Context = { logs: string[] };
+
+const engine = new Pipeline<Context>(async (ctx, next) => {
+  ctx.logs.push('first');
+  await next();
+});
+
+engine.use(async (ctx, next) => {
+  ctx.logs.push('second');
+  await next();
+});
+
+const context: Context = { logs: [] };
+await engine.execute(context);
+// context.logs => ['first', 'second']
+```
+
+## Reactive Pipeline
+
+`pipe` composes plain functions into a single reusable, lazily evaluated
+function. It supports up to **10 function compositions**, 0–3 parameters per
+function, promises, early exit and monads.
+
+```typescript
+import { pipe } from '@hyperse/pipeline';
+
+const result = await pipe(
+  () => 123,
+  (n) => n + 1
+)();
+// result => 124
+```
+
+<Callout title="Why two APIs?">
+  Use the **middleware engine** when you need ordered interception of a request
+  or task with a shared context (authentication, logging, error handling). Use
+  the **reactive pipeline** when you want to compose pure data transformations
+  with strong type inference.
+</Callout>
+
+## Features at a glance
+
+### Middleware engine
+
+- Type-safe middleware composition with full TypeScript support
+- Async/await friendly, with automatic error propagation
+- Context sharing between middleware functions
+- Chaining and composition via `use()`
+
+### Reactive pipeline
+
+- Functional composition with up to 10 functions
+- Promise and async support throughout
+- Early exit with `exitPipe` / `isExitPipeValue`
+- Global context injection with `pipeContext`
+- Dynamic modification with `replace` and `replaceUndo`
+- Monad support for `Either`, `Maybe` and `Validation`
+- Integrations with `fp-ts`, `monet` and `purify-ts`
+
+### Type system
+
+- Generic inference for context and return types
+- Function signature preservation across compositions
+- Monad detection for automatic composition
+- Parameter count validation (0–3 parameters per function)
+
+## Next steps
+
+<Cards>
+  <Card
+    title="Installation"
+    href="/docs/installation"
+    icon={<Icon name="Download" />}
+  >
+    Add `@hyperse/pipeline` to your project.
+  </Card>
+  <Card
+    title="Middleware engine"
+    href="/docs/middleware"
+    icon={<Icon name="Layers" />}
+  >
+    Build ordered, context-aware middleware chains.
+  </Card>
+  <Card
+    title="Reactive pipeline"
+    href="/docs/reactive"
+    icon={<Icon name="Workflow" />}
+  >
+    Compose typed data transformations.
+  </Card>
+  <Card title="Examples" href="/docs/examples" icon={<Icon name="Code" />}>
+    Real-world recipes for both paradigms.
+  </Card>
+</Cards>

@@ -1,0 +1,74 @@
+---
+title: Performance
+description: Runtime characteristics and memory behaviour of the pipeline.
+icon: Gauge
+---
+
+The implementation favours direct function composition over generic wrappers.
+
+## Characteristics
+
+- **Lazy evaluation** — a pipeline only executes when you call it
+- **Minimal overhead** — functions are composed directly, without extra layers
+  of indirection per step
+- **Async optimisation** — promises are threaded through without redundant
+  wrapping
+- **Memory efficient** — internal bookkeeping uses `WeakMap`/`WeakSet`, so
+  wrapper metadata does not prevent garbage collection
+
+## Why WeakMap and WeakSet?
+
+Early-exit wrappers are identified by identity rather than by a property that
+would be visible on plain objects:
+
+```typescript
+import { exitPipe, isExitPipeValue } from '@hyperse/pipeline';
+
+const wrapped = exitPipe(123);
+isExitPipeValue(wrapped); // true
+```
+
+Because the registry is a `WeakSet`, a wrapped value that is no longer
+referenced can be collected, and no stray marker properties leak onto the
+objects you produce.
+
+## Composing without allocation churn
+
+`pipe` builds the composition once, when it is called, and reuses that closure
+on every invocation:
+
+```typescript
+import { pipe } from '@hyperse/pipeline';
+
+// Composition happens here, once...
+const run = pipe(
+  (n: number) => n + 1,
+  (n) => n * 2
+);
+
+// ...and is reused for every call.
+for (let i = 0; i < 10_000; i++) {
+  await run(i);
+}
+```
+
+<Callout type="info" title="Dynamic replacement">
+  `replace()` mutates the step list of the existing composition rather than
+  rebuilding it, so swapping a step is cheap — and `replaceUndo()` restores the
+  originals.
+</Callout>
+
+## Next steps
+
+<Cards>
+  <Card
+    title="Browser Support"
+    href="/docs/support"
+    icon={<Icon name="Globe" />}
+  >
+    Required runtime features.
+  </Card>
+  <Card title="Examples" href="/docs/examples" icon={<Icon name="Code" />}>
+    See the API in action.
+  </Card>
+</Cards>

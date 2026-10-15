@@ -1,0 +1,52 @@
+---
+title: Browser Support
+description: Runtimes and environments the library can target.
+icon: Globe
+---
+
+The library is built on modern JavaScript features and has no runtime
+dependencies.
+
+## Supported environments
+
+- **Node.js** 16 and newer
+- **Modern browsers** with ES2020+ support
+- **TypeScript** 4.5 and newer (for the full type surface)
+
+## What it relies on
+
+| Feature               | Used for                               |
+| --------------------- | -------------------------------------- |
+| `Promise`             | Threading async steps and middleware   |
+| `WeakMap` / `WeakSet` | Early-exit and replacement bookkeeping |
+| `Symbol`              | Internal pipeline identity marker      |
+| `async` / `await`     | Middleware and pipeline execution      |
+
+Because the bookkeeping is identity-based, the library does not attach
+properties to your values, which makes it safe to pass through frozen objects
+and values from other libraries.
+
+## Bundling
+
+The published package is ESM-first, so bundlers can tree-shake the helpers you
+do not import:
+
+```typescript
+// Only the parts you use end up in your bundle.
+import { pipe, exitPipe } from '@hyperse/pipeline';
+```
+
+## Next steps
+
+<Cards>
+  <Card
+    title="Performance"
+    href="/docs/performance"
+    icon={<Icon name="Gauge" />}
+  >
+    Runtime cost and memory behaviour.
+  </Card>
+  <Card title="Examples" href="/docs/examples" icon={<Icon name="Code" />}>
+    Recipes for both paradigms.
+  </Card>
+</Cards>
